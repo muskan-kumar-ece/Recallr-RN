@@ -1,0 +1,764 @@
+/* ==========================================================================
+   RECALLR DESIGN SYSTEM - COMPONENT STYLESHEET
+   Unified component styles for Recallr AI Contact CRM Prototype
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Mobile Phone Frame Container (.p)
+   -------------------------------------------------------------------------- */
+.p {
+  background: #F8F7F4;
+  color: #2b2b2b;
+  border-radius: 28px;
+  padding: 16px 14px 14px;
+  font-size: 14px;
+  line-height: 1.4;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 412px;
+  margin: 0 auto 28px auto;
+  box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  scroll-margin-top: 24px;
+}
+
+@media (max-width: 440px) {
+  .p {
+    border-radius: 20px;
+    padding: 14px 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Horizontal Chip Scroll Container (.chip-scroll, .no-scrollbar)
+   Hides clunky desktop scrollbars while preserving touch/wheel/drag scroll
+   -------------------------------------------------------------------------- */
+.chip-scroll,
+.no-scrollbar,
+[style*="overflow-x:auto"],
+[style*="overflow-x: auto"] {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+  -webkit-overflow-scrolling: touch;
+  cursor: grab;
+  padding-bottom: 2px;
+}
+
+.chip-scroll:active,
+.no-scrollbar:active,
+.grabbing {
+  cursor: grabbing !important;
+}
+
+.chip-scroll::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar,
+[style*="overflow-x:auto"]::-webkit-scrollbar,
+[style*="overflow-x: auto"]::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* --------------------------------------------------------------------------
+   Card Container (.c) & Signature Orange Accent (.o)
+   -------------------------------------------------------------------------- */
+.c {
+  position: relative;
+  background: #ffffff;
+  border: 0.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.o {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background: #E8641B;
+  border-top-left-radius: 40px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 12px;
+  box-sizing: border-box;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.o:hover {
+  filter: brightness(1.08);
+}
+
+.o:active {
+  transform: scale(0.96);
+}
+
+/* --------------------------------------------------------------------------
+   Typography & Labels (.g, .lb, .sec, .hl, .l)
+   -------------------------------------------------------------------------- */
+.g {
+  color: #6b6b66;
+  font-size: 11px;
+}
+
+.lb {
+  font-size: 11px;
+  color: #6b6b66;
+  text-align: center;
+  margin: 0 0 8px;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.sec {
+  font-size: 13px;
+  font-weight: 500;
+  margin: 16px 2px 8px;
+  color: #2b2b2b;
+}
+
+.hl {
+  color: #E8641B;
+  font-weight: 500;
+}
+
+.l {
+  font-size: 12px;
+  color: #E8641B;
+  font-weight: 500;
+  margin: 14px 4px 6px;
+}
+
+.v {
+  font-size: 12px;
+  color: #8a8a85;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #E8641B;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   Interactive Buttons (.btn, .btn2)
+   -------------------------------------------------------------------------- */
+.btn {
+  height: 50px;
+  border-radius: 25px;
+  background: #E8641B;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  border: none;
+  font-size: 14px;
+  user-select: none;
+  transition: transform 0.12s ease, filter 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 2px 8px rgba(232, 100, 27, 0.25);
+}
+
+.btn:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 4px 12px rgba(232, 100, 27, 0.35);
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
+  box-shadow: 0 1px 4px rgba(232, 100, 27, 0.2);
+}
+
+.btn2 {
+  height: 50px;
+  border-radius: 25px;
+  background: #ffffff;
+  border: 1px solid #E8641B;
+  color: #E8641B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  gap: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 14px;
+  user-select: none;
+  transition: transform 0.12s ease, background-color 0.15s ease;
+}
+
+.btn2:hover {
+  background-color: #FFF9F4;
+  color: #E8641B;
+  text-decoration: none;
+}
+
+.btn2:active {
+  transform: scale(0.97);
+}
+
+/* --------------------------------------------------------------------------
+   Chips & Tags (.chip, .tag, .on)
+   -------------------------------------------------------------------------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: #ffffff;
+  border: 0.5px solid rgba(0, 0, 0, 0.1);
+  color: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  transition: transform 0.12s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.chip:hover {
+  border-color: #E8641B;
+  color: #E8641B;
+}
+
+.chip.on,
+.on {
+  background: #E8641B !important;
+  color: #ffffff !important;
+  border-color: #E8641B !important;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  background: #FDEBDD;
+  color: #B84A10;
+  white-space: nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   Icon Holders & Circular Buttons (.ic, .ci)
+   -------------------------------------------------------------------------- */
+.ic {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: #FDEBDD;
+  color: #E8641B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex: none;
+}
+
+.ci {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 0.5px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+  flex: none;
+  user-select: none;
+  transition: transform 0.12s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.ci:hover {
+  background-color: #f8f6f2;
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.ci:active {
+  transform: scale(0.92);
+}
+
+/* --------------------------------------------------------------------------
+   List Rows & Form Rows (.r, .rw, .fr)
+   -------------------------------------------------------------------------- */
+.r {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.12s ease;
+}
+
+.r:hover {
+  background-color: #fdfcfa;
+}
+
+.r:last-child {
+  border-bottom: none;
+}
+
+.rw {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.12s ease;
+}
+
+.rw:hover {
+  background-color: #fdfcfa;
+}
+
+.rw:last-child {
+  border-bottom: none;
+}
+
+.fr {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 11px 14px;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+  font-size: 13px;
+  gap: 10px;
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 0.12s ease;
+}
+
+.fr:hover {
+  background-color: #fdfcfa;
+}
+
+.fr:last-child {
+  border-bottom: none;
+}
+
+.fr .l {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  color: inherit;
+  font-size: 13px;
+  font-weight: normal;
+}
+
+/* --------------------------------------------------------------------------
+   Section Header (.h)
+   -------------------------------------------------------------------------- */
+.h {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 18px 2px 8px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #2b2b2b;
+}
+
+.h a {
+  font-size: 12px;
+  color: #E8641B;
+  font-weight: 400;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.h a:hover {
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   Quick Actions (.q, .sq)
+   -------------------------------------------------------------------------- */
+.q, .sq {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #2b2b2b;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+}
+
+.q div, .sq div {
+  width: 100%;
+  height: 52px;
+  background: #ffffff;
+  border: 0.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #E8641B;
+  font-size: 22px;
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.q:hover div, .sq:hover div {
+  transform: translateY(-2px);
+  border-color: rgba(232, 100, 27, 0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.q:active div, .sq:active div {
+  transform: scale(0.96);
+}
+
+/* --------------------------------------------------------------------------
+   Bottom Tab Navigation (.t)
+   -------------------------------------------------------------------------- */
+.t {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+  color: #8a8a85;
+  cursor: pointer;
+  text-decoration: none;
+  user-select: none;
+  padding: 4px 8px;
+  border-radius: 12px;
+  transition: color 0.15s ease, transform 0.12s ease;
+}
+
+.t:hover {
+  color: #E8641B;
+}
+
+.t:active {
+  transform: scale(0.92);
+}
+
+.t.active {
+  color: #E8641B;
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   Avatars (.av)
+   -------------------------------------------------------------------------- */
+.av {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #FDEBDD;
+  color: #E8641B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 13px;
+  flex: none;
+}
+
+/* --------------------------------------------------------------------------
+   Toggle Switch (.tg)
+   -------------------------------------------------------------------------- */
+.tg {
+  width: 38px;
+  height: 22px;
+  border-radius: 11px;
+  background: #d6d3cc;
+  position: relative;
+  display: inline-block;
+  flex: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.tg i {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 0.2s ease, left 0.2s ease;
+}
+
+.tg.t {
+  background: #E8641B;
+}
+
+.tg.t i {
+  left: auto;
+  right: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Category Cards (.cat)
+   -------------------------------------------------------------------------- */
+.cat {
+  padding: 12px;
+  height: 112px;
+  box-sizing: border-box;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.cat:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+}
+
+/* --------------------------------------------------------------------------
+   Chat Bubbles (.u, .a)
+   -------------------------------------------------------------------------- */
+.u {
+  align-self: flex-end;
+  max-width: 80%;
+  background: #E8641B;
+  color: #ffffff;
+  padding: 10px 14px;
+  border-radius: 18px;
+  border-bottom-right-radius: 4px;
+  font-size: 13px;
+}
+
+.a {
+  align-self: flex-start;
+  max-width: 92%;
+  background: #ffffff;
+  border: 0.5px solid rgba(0, 0, 0, 0.08);
+  padding: 12px 14px;
+  border-radius: 18px;
+  border-bottom-left-radius: 4px;
+  font-size: 13px;
+}
+
+/* --------------------------------------------------------------------------
+   Controls & Pickers (.ip, .cl, .ck, .rd, .pick, .seg, .pl, .pb, .sk, .up, .ft)
+   -------------------------------------------------------------------------- */
+.ip {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 0.5px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 21px;
+  color: #6b6b66;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ip:hover, .ip.s {
+  border: 1.5px solid #E8641B;
+  color: #E8641B;
+  background: #FFF9F4;
+}
+
+.cl {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  flex: none;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.cl:hover {
+  transform: scale(1.1);
+}
+
+.ck {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  border: 1.5px solid #cfcbc2;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.ck.t {
+  background: #E8641B;
+  border-color: #E8641B;
+}
+
+.rd {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid #cfcbc2;
+  flex: none;
+}
+
+.pick {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 0.5px solid rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pick:hover, .pick.s {
+  border: 1.5px solid #E8641B;
+  background: #FFF9F4;
+}
+
+.pick.s .rd {
+  border-color: #E8641B;
+  background: radial-gradient(#E8641B 45%, transparent 50%);
+}
+
+.seg {
+  display: flex;
+  background: #EDEBE5;
+  border-radius: 20px;
+  padding: 3px;
+}
+
+.seg span {
+  flex: 1;
+  text-align: center;
+  padding: 7px 0;
+  font-size: 12px;
+  border-radius: 17px;
+  color: #6b6b66;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.seg .s {
+  background: #ffffff;
+  color: #2b2b2b;
+  font-weight: 500;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.pl {
+  padding: 14px 16px;
+  min-height: 72px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sel {
+  border: 1.5px solid #E8641B !important;
+  background: #FFF9F4 !important;
+}
+
+.pb {
+  height: 6px;
+  border-radius: 3px;
+  background: #ECE9E3;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.pb i {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  background: #E8641B;
+}
+
+.sk {
+  background: #ECE9E3;
+  border-radius: 6px;
+}
+
+.ft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 13px;
+}
+
+.ft i {
+  color: #E8641B;
+  font-size: 19px;
+}
+
+.up {
+  flex: 1;
+  height: 64px;
+  border: 1px dashed #cfcbc2;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: #6b6b66;
+  gap: 2px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.up:hover {
+  border-color: #E8641B;
+  background-color: #FFF9F4;
+}
+
+.opt {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.opt:hover {
+  background-color: #FFF9F4;
+}

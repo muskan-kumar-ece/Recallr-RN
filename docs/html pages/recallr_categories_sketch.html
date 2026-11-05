@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recallr - Categories</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.42.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </marker>
+    </defs>
+  </svg>
+
+  <div id="vis-container">
+    <h2 class="sr-only">Three Recallr sketches: the Categories overview grid with an Uncategorized card, a single category page for Plastic Business with members, and a new category sheet with name, icon and color pickers.</h2>
+
+    <!-- Anchor Pills -->
+    <div class="screen-anchor-nav">
+      <a class="screen-anchor-pill active" href="#categories-overview">1. Overview</a>
+      <a class="screen-anchor-pill" href="#category-detail">2. Category Page</a>
+      <a class="screen-anchor-pill" href="#new-category">3. New Category</a>
+    </div>
+
+    <!-- Screen 1: Categories Overview -->
+    <div class="lb">1. CATEGORIES OVERVIEW</div>
+    <div class="p" id="categories-overview" style="margin-bottom:32px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <a href="recallr_home_screen_sketch.html" class="ci" title="Back to Home"><i class="ti ti-arrow-left" aria-hidden="true"></i></a>
+          <div style="font-size:20px;font-weight:500;">Categories</div>
+        </div>
+        <a href="#new-category" class="ci" style="background:#E8641B;color:#fff;border:none;" title="Create New Category"><i class="ti ti-plus" aria-hidden="true"></i></a>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px;">
+        <a href="#category-detail" class="c cat">
+          <div class="ic"><i class="ti ti-school" aria-hidden="true"></i></div>
+          <div style="font-weight:500;margin-top:8px;font-size:13px;">School Friends</div>
+          <div class="g">2 new this week</div>
+          <div class="o" style="width:50px;height:40px;font-size:15px;font-weight:500;">24</div>
+        </a>
+        <a href="#category-detail" class="c cat">
+          <div class="ic"><i class="ti ti-code" aria-hidden="true"></i></div>
+          <div style="font-weight:500;margin-top:8px;font-size:13px;">App Developers</div>
+          <div class="g">Updated today</div>
+          <div class="o" style="width:50px;height:40px;font-size:15px;font-weight:500;">18</div>
+        </a>
+        <a href="#category-detail" class="c cat">
+          <div class="ic"><i class="ti ti-building-factory-2" aria-hidden="true"></i></div>
+          <div style="font-weight:500;margin-top:8px;font-size:13px;">Plastic Business</div>
+          <div class="g">Updated 3 days ago</div>
+          <div class="o" style="width:50px;height:40px;font-size:15px;font-weight:500;">9</div>
+        </a>
+        <a href="#category-detail" class="c cat">
+          <div class="ic"><i class="ti ti-building-store" aria-hidden="true"></i></div>
+          <div style="font-weight:500;margin-top:8px;font-size:13px;">Local Shop</div>
+          <div class="g">Updated last week</div>
+          <div class="o" style="width:50px;height:40px;font-size:15px;font-weight:500;">6</div>
+        </a>
+      </div>
+
+      <div class="c" style="margin-top:10px;padding:14px 16px;border-style:dashed;background:transparent;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="ic" style="background:#EDEBE5;color:#6b6b66;"><i class="ti ti-inbox" aria-hidden="true"></i></div>
+          <div style="flex:1;"><div style="font-weight:500;">Uncategorized</div><div class="g">29 people to sort</div></div>
+          <a href="recallr_ask_ai_chat_sketch.html" class="chip" style="display:inline-flex;align-items:center;gap:4px;"><i class="ti ti-sparkles" style="font-size:14px;" aria-hidden="true"></i>Sort with AI</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 2: Category Page -->
+    <div class="lb">2. CATEGORY PAGE</div>
+    <div class="p" id="category-detail" style="margin-bottom:32px;">
+      <div style="display:flex;justify-content:space-between;">
+        <a href="#categories-overview" class="ci" title="Back to Categories"><i class="ti ti-arrow-left" aria-hidden="true"></i></a>
+        <a href="#new-category" class="ci" title="Options"><i class="ti ti-dots" aria-hidden="true"></i></a>
+      </div>
+
+      <div class="c" style="margin-top:12px;padding:16px 16px 20px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="ic" style="width:48px;height:48px;border-radius:14px;font-size:26px;"><i class="ti ti-building-factory-2" aria-hidden="true"></i></div>
+          <div><div style="font-size:20px;font-weight:500;">Plastic Business</div><div class="g" style="font-size:12px;">9 people · 2 need follow-up</div></div>
+        </div>
+        <a href="#new-category" class="o" style="width:60px;height:46px;font-size:20px;"><i class="ti ti-edit" aria-hidden="true"></i></a>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <a href="recallr_people_list_sketch.html" class="chip" style="display:inline-flex;align-items:center;gap:6px;background:#E8641B;color:#fff;"><i class="ti ti-user-plus" style="font-size:15px;" aria-hidden="true"></i>Add person</a>
+        <a href="recallr_ask_ai_chat_sketch.html" class="chip" style="display:inline-flex;align-items:center;gap:6px;"><i class="ti ti-sparkles" style="font-size:15px;" aria-hidden="true"></i>Ask about this group</a>
+      </div>
+
+      <a href="recallr_search_and_states.html" style="margin-top:12px;height:42px;background:#fff;border:0.5px solid rgba(0,0,0,.08);border-radius:14px;display:flex;align-items:center;gap:8px;padding:0 14px;color:#8a8a85;font-size:13px;text-decoration:none;">
+        <i class="ti ti-search" style="font-size:17px;" aria-hidden="true"></i>Search in Plastic Business
+      </a>
+
+      <div class="c" style="margin-top:12px;">
+        <a href="recallr_contact_profile_sketch.html" class="r">
+          <div class="av">RK</div>
+          <div style="flex:1;min-width:0;"><div style="font-weight:500;">Ramesh Kumar</div><div class="g">Owner, Sri Plastics · 32 days ago</div></div>
+          <i class="ti ti-chevron-right" style="color:#b5b2aa;" aria-hidden="true"></i>
+        </a>
+        <a href="recallr_contact_profile_sketch.html" class="r">
+          <div class="av">MP</div>
+          <div style="flex:1;min-width:0;"><div style="font-weight:500;">Meena Patel</div><div class="g">Packaging supplier · 6 days ago</div></div>
+          <i class="ti ti-chevron-right" style="color:#b5b2aa;" aria-hidden="true"></i>
+        </a>
+        <a href="recallr_contact_profile_sketch.html" class="r">
+          <div class="av">SG</div>
+          <div style="flex:1;min-width:0;"><div style="font-weight:500;">Suresh Goud</div><div class="g">Machine dealer · 14 days ago</div></div>
+          <i class="ti ti-chevron-right" style="color:#b5b2aa;" aria-hidden="true"></i>
+        </a>
+      </div>
+      <div class="g" style="text-align:center;margin-top:12px;">Deleting this category keeps all its people.</div>
+    </div>
+
+    <!-- Screen 3: New Category -->
+    <div class="lb">3. NEW CATEGORY</div>
+    <div class="p" id="new-category">
+      <div style="width:40px;height:4px;border-radius:2px;background:#d6d3cc;margin:0 auto 12px;"></div>
+      <div style="font-size:18px;font-weight:500;">New category</div>
+      <div class="c" style="margin-top:12px;padding:12px;display:flex;align-items:center;gap:12px;background:#FBFAF8;">
+        <div class="ic"><i class="ti ti-building-store" aria-hidden="true"></i></div>
+        <div><div style="font-weight:500;font-size:13px;">Local Shop</div><div class="g">0 people</div></div>
+      </div>
+      <div class="c" style="margin-top:12px;height:48px;display:flex;align-items:center;padding:0 16px;font-size:14px;">Local Shop</div>
+      <div style="font-size:12px;color:#6b6b66;margin:14px 2px 8px;">Icon</div>
+      <div style="display:flex;gap:8px;">
+        <div class="ip"><i class="ti ti-users" aria-hidden="true"></i></div>
+        <div class="ip s"><i class="ti ti-building-store" aria-hidden="true"></i></div>
+        <div class="ip"><i class="ti ti-briefcase" aria-hidden="true"></i></div>
+        <div class="ip"><i class="ti ti-heart" aria-hidden="true"></i></div>
+        <div class="ip"><i class="ti ti-star" aria-hidden="true"></i></div>
+      </div>
+      <div style="font-size:12px;color:#6b6b66;margin:14px 2px 8px;">Color</div>
+      <div style="display:flex;gap:12px;align-items:center;">
+        <div class="cl" style="background:#E8641B;box-shadow:0 0 0 2px #F8F7F4,0 0 0 4px #E8641B;"></div>
+        <div class="cl" style="background:#4F5BD5;"></div>
+        <div class="cl" style="background:#1D9E75;"></div>
+        <div class="cl" style="background:#D4537E;"></div>
+        <div class="cl" style="background:#444441;"></div>
+      </div>
+      <a href="#categories-overview" class="btn" style="margin-top:18px;">Create category</a>
+    </div>
+  </div>
+
+  <script src="js/nav-hub.js" defer></script>
+</body>
+</html>

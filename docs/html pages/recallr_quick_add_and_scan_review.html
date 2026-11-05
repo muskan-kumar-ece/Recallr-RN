@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recallr - Quick Add & Scan</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.42.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </marker>
+    </defs>
+  </svg>
+
+  <div id="vis-container">
+    <h2 class="sr-only">Two sketches for Recallr: the Quick Add bottom sheet with five options, and the business card scan review screen with detected fields, a flagged phone number, a duplicate warning, category chips, where met field, follow-up toggle and a save button.</h2>
+
+    <!-- Anchor Pills -->
+    <div class="screen-anchor-nav">
+      <a class="screen-anchor-pill active" href="#quick-add">1. Quick Add Sheet</a>
+      <a class="screen-anchor-pill" href="#scan-review">2. Review Scanned Card</a>
+    </div>
+
+    <!-- Screen 1: Quick Add Sheet -->
+    <div class="lb">1. QUICK ADD SHEET (center + button)</div>
+    <div class="p" id="quick-add" style="margin-bottom:32px;overflow:hidden;padding:0;">
+      <a href="recallr_home_screen_sketch.html" style="display:flex;height:54px;background:#E4E2DC;align-items:center;justify-content:center;font-size:12px;color:#8a8a85;text-decoration:none;" title="Tap to close sheet">
+        <i class="ti ti-chevron-down" style="margin-right:4px;"></i> Tap to close sheet
+      </a>
+      <div style="background:#F8F7F4;border-top-left-radius:24px;border-top-right-radius:24px;margin-top:-16px;position:relative;padding:12px 14px 20px;">
+        <div style="width:40px;height:4px;border-radius:2px;background:#d6d3cc;margin:0 auto 10px;"></div>
+        <div style="font-size:18px;font-weight:500;margin-bottom:6px;">Add to your network</div>
+
+        <a href="#scan-review" class="c opt" style="padding-right:60px;min-height:62px;box-sizing:border-box;text-decoration:none;color:inherit;">
+          <div class="ic"><i class="ti ti-scan" aria-hidden="true"></i></div>
+          <div><div style="font-weight:500;">Scan business card</div><div class="g">Auto-fills name, company, phone</div></div>
+          <div class="o" style="width:52px;height:42px;font-size:20px;"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+        </a>
+
+        <a href="recallr_edit_share_merge.html#edit-contact" class="c opt" style="text-decoration:none;color:inherit;">
+          <div class="ic"><i class="ti ti-user-plus" aria-hidden="true"></i></div>
+          <div style="flex:1;"><div style="font-weight:500;">Add manually</div><div class="g">Type the details yourself</div></div>
+          <i class="ti ti-chevron-right" style="color:#b5b2aa;" aria-hidden="true"></i>
+        </a>
+
+        <a href="recallr_edit_card_and_public_page.html#public-card" class="c opt" style="text-decoration:none;color:inherit;">
+          <div class="ic"><i class="ti ti-qrcode" aria-hidden="true"></i></div>
+          <div style="flex:1;"><div style="font-weight:500;">Scan Recallr QR</div><div class="g">Save someone's digital card</div></div>
+          <i class="ti ti-chevron-right" style="color:#b5b2aa;" aria-hidden="true"></i>
+        </a>
+
+        <a href="recallr_import_and_document_viewer.html#import-permission" class="c opt" style="text-decoration:none;color:inherit;">
+          <div class="ic"><i class="ti ti-address-book" aria-hidden="true"></i></div>
+          <div style="flex:1;"><div style="font-weight:500;">Import from contacts</div><div class="g">Pick from your phone</div></div>
+          <i class="ti ti-chevron-right" style="color:#b5b2aa;" aria-hidden="true"></i>
+        </a>
+
+        <a href="recallr_ask_ai_chat_sketch.html" class="c opt" style="text-decoration:none;color:inherit;">
+          <div class="ic"><i class="ti ti-sparkles" aria-hidden="true"></i></div>
+          <div style="flex:1;"><div style="font-weight:500;">Ask AI to add</div><div class="g">Say it or type it</div></div>
+          <i class="ti ti-chevron-right" style="color:#b5b2aa;" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+
+    <!-- Screen 2: Review Scanned Card -->
+    <div class="lb">2. REVIEW SCANNED CARD</div>
+    <div class="p" id="scan-review" style="padding:16px 14px 20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <a href="#quick-add" class="ci" title="Back to Quick Add"><i class="ti ti-arrow-left" aria-hidden="true"></i></a>
+        <div style="font-size:16px;font-weight:500;">Review card</div>
+        <a href="#scan-review" style="font-size:12px;color:#E8641B;text-decoration:none;">Retake</a>
+      </div>
+
+      <div class="c" style="margin-top:12px;height:92px;display:flex;align-items:center;padding:0 16px;">
+        <div style="position:relative;width:120px;height:68px;background:#fff;border:0.5px solid rgba(0,0,0,.12);border-radius:8px;overflow:hidden;flex:none;">
+          <div style="position:absolute;left:8px;top:8px;width:14px;height:14px;border-radius:4px;background:#E8641B;"></div>
+          <div style="position:absolute;right:0;bottom:0;width:62px;height:42px;background:#E8641B;border-top-left-radius:22px;"></div>
+        </div>
+        <div style="margin-left:14px;"><div style="font-weight:500;">Card scanned</div><div class="g">Details read automatically</div></div>
+      </div>
+
+      <div style="margin-top:10px;padding:10px 14px;border-radius:14px;background:#FDEBDD;display:flex;align-items:center;gap:10px;font-size:12px;color:#8a3a0c;">
+        <i class="ti ti-alert-circle" style="font-size:20px;color:#E8641B;flex:none;" aria-hidden="true"></i>
+        <span style="flex:1;">Ramesh Kumar may already exist.</span>
+        <a href="recallr_edit_share_merge.html#merge-duplicates" style="font-weight:600;color:#E8641B;text-decoration:none;">Merge</a>
+      </div>
+
+      <div class="c" style="margin-top:10px;">
+        <div class="fr"><span class="g">Name</span><span style="font-weight:500;">Ramesh Kumar</span></div>
+        <div class="fr"><span class="g">Role</span><span>Owner</span></div>
+        <div class="fr"><span class="g">Company</span><span>Sri Plastics</span></div>
+        <div class="fr" style="background:#FFF6EE;"><span class="g">Phone</span><span style="display:flex;align-items:center;gap:8px;">+91 98765 4321<span style="font-size:11px;padding:2px 8px;border-radius:20px;background:#E8641B;color:#fff;">Check</span></span></div>
+        <div class="fr"><span class="g">Email</span><span>ramesh@sriplastics.in</span></div>
+        <div class="fr"><span class="g">Address</span><span>Balanagar, Hyderabad</span></div>
+      </div>
+
+      <div style="font-size:13px;font-weight:500;margin:14px 2px 8px;">Category</div>
+      <div class="chip-scroll" style="display:flex;gap:8px;">
+        <span class="chip">School Friends</span>
+        <span class="chip on">Plastic Business</span>
+        <a href="recallr_categories_sketch.html#new-category" class="chip">+ New</a>
+      </div>
+
+      <div class="c" style="margin-top:12px;">
+        <div class="fr"><span class="g">Where did you meet?</span><span>Plastic Expo</span></div>
+        <div class="fr"><span>Set follow-up</span><span style="display:flex;align-items:center;gap:8px;"><span style="font-size:12px;color:#E8641B;">In 3 days</span><span class="tg t"><i></i></span></span></div>
+      </div>
+
+      <a href="recallr_contact_profile_sketch.html" class="btn" style="margin-top:16px;">
+        <i class="ti ti-check" style="font-size:20px;" aria-hidden="true"></i>Save to Recallr
+      </a>
+      <div style="text-align:center;font-size:12px;color:#E8641B;margin-top:12px;">
+        <a href="#scan-review" style="color:#E8641B;">Save and scan another</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/nav-hub.js" defer></script>
+</body>
+</html>

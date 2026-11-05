@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recallr - Search & States</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.42.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </marker>
+    </defs>
+  </svg>
+
+  <div id="vis-container">
+    <h2 class="sr-only">Sketches for Recallr: the global search results screen for the query ram with grouped people and notes plus an Ask Recallr card, and shared states for empty list, loading skeleton, offline banner, error retry and an undo toast.</h2>
+
+    <!-- Anchor Pills -->
+    <div class="screen-anchor-nav">
+      <a class="screen-anchor-pill active" href="#global-search">1. Global Search</a>
+      <a class="screen-anchor-pill" href="#shared-states">2. Shared States</a>
+    </div>
+
+    <!-- Screen 1: Global Search -->
+    <div class="lb">1. GLOBAL SEARCH (typing "ram")</div>
+    <div class="p" id="global-search" style="margin-bottom:32px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="flex:1;height:44px;background:#fff;border:1px solid #E8641B;border-radius:14px;display:flex;align-items:center;gap:8px;padding:0 14px;font-size:14px;">
+          <i class="ti ti-search" style="font-size:18px;color:#E8641B;" aria-hidden="true"></i>ram<span style="width:1px;height:18px;background:#E8641B;"></span>
+          <a href="recallr_home_screen_sketch.html" style="margin-left:auto;color:#b5b2aa;font-size:18px;"><i class="ti ti-circle-x-filled" aria-hidden="true"></i></a>
+        </div>
+        <a href="recallr_home_screen_sketch.html" style="font-size:13px;color:#E8641B;text-decoration:none;">Cancel</a>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <span class="chip on">All</span>
+        <a href="recallr_people_list_sketch.html" class="chip">People</a>
+        <a href="recallr_notes_reminders_sketch.html" class="chip">Notes</a>
+        <a href="recallr_categories_sketch.html" class="chip">Categories</a>
+      </div>
+
+      <div class="sec">People</div>
+      <div class="c">
+        <a href="recallr_contact_profile_sketch.html" class="r">
+          <div class="av">RK</div>
+          <div style="flex:1;min-width:0;">
+            <div><span class="hl">Ram</span>esh Kumar</div>
+            <div class="g">Owner, Sri Plastics · Plastic Business</div>
+          </div>
+          <i class="ti ti-chevron-right" style="color:#b5b2aa;" aria-hidden="true"></i>
+        </a>
+        <a href="recallr_contact_profile_sketch.html" class="r">
+          <div class="av">RI</div>
+          <div style="flex:1;min-width:0;">
+            <div><span class="hl">Ram</span>ya Iyer</div>
+            <div class="g">Designer · App Developers</div>
+          </div>
+          <i class="ti ti-chevron-right" style="color:#b5b2aa;" aria-hidden="true"></i>
+        </a>
+      </div>
+
+      <div class="sec">Notes</div>
+      <div class="c">
+        <a href="recallr_notes_reminders_sketch.html" class="r">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:13px;">Call <span class="hl">Ram</span>esh about order</div>
+            <div class="g">Reminder · Today, 10:30 AM</div>
+          </div>
+        </a>
+        <a href="recallr_notes_reminders_sketch.html" class="r">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:13px;">Quote for 5,000 units</div>
+            <div class="g">Mentions <span class="hl">Ram</span>esh · 2 Oct</div>
+          </div>
+        </a>
+      </div>
+
+      <a href="recallr_ask_ai_chat_sketch.html" class="c" style="margin-top:14px;padding:14px 16px 16px;display:block;text-decoration:none;color:inherit;">
+        <div style="display:flex;align-items:center;gap:8px;"><i class="ti ti-sparkles" style="color:#E8641B;font-size:20px;" aria-hidden="true"></i><span style="font-weight:500;">Not what you meant?</span></div>
+        <div class="g" style="font-size:12px;margin-top:4px;padding-right:50px;">Ask Recallr about "ram"</div>
+        <div class="o" style="width:56px;height:44px;font-size:20px;"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+      </a>
+    </div>
+
+    <!-- Screen 2: Shared States -->
+    <div class="lb">2. SHARED STATES</div>
+    <div class="p" id="shared-states">
+      <div class="sec" style="margin-top:2px;">Empty (People list)</div>
+      <div class="c" style="padding:22px 16px;text-align:center;">
+        <div class="ic" style="margin:0 auto;"><i class="ti ti-users" aria-hidden="true"></i></div>
+        <div style="font-size:16px;font-weight:500;margin-top:12px;">No people yet</div>
+        <div class="g" style="font-size:12px;margin-top:4px;">Scan a business card to save your first contact.</div>
+        <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;">
+          <a href="recallr_quick_add_and_scan_review.html#scan-review" class="btn" style="height:44px;padding:0 18px;font-size:13px;"><i class="ti ti-scan" style="font-size:17px;" aria-hidden="true"></i>Scan card</a>
+          <a href="recallr_edit_share_merge.html#edit-contact" class="btn2" style="height:44px;padding:0 18px;font-size:13px;">Add manually</a>
+        </div>
+      </div>
+
+      <div class="sec">Loading</div>
+      <div class="c">
+        <div class="r"><div class="sk" style="width:40px;height:40px;border-radius:50%;"></div><div style="flex:1;"><div class="sk" style="width:55%;height:10px;"></div><div class="sk" style="width:80%;height:8px;margin-top:8px;"></div></div></div>
+        <div class="r"><div class="sk" style="width:40px;height:40px;border-radius:50%;"></div><div style="flex:1;"><div class="sk" style="width:45%;height:10px;"></div><div class="sk" style="width:70%;height:8px;margin-top:8px;"></div></div></div>
+        <div class="r"><div class="sk" style="width:40px;height:40px;border-radius:50%;"></div><div style="flex:1;"><div class="sk" style="width:60%;height:10px;"></div><div class="sk" style="width:75%;height:8px;margin-top:8px;"></div></div></div>
+      </div>
+
+      <div class="sec">Offline</div>
+      <div style="padding:10px 14px;border-radius:14px;background:#FDEBDD;display:flex;align-items:center;gap:10px;font-size:12px;color:#8a3a0c;">
+        <i class="ti ti-cloud-off" style="font-size:20px;color:#E8641B;flex:none;" aria-hidden="true"></i>
+        <span>You're offline. Your changes will sync when you're back online.</span>
+      </div>
+
+      <div class="sec">Error</div>
+      <div class="c" style="padding:20px 16px;text-align:center;">
+        <div class="ic" style="background:#FBE5E2;color:#D9483B;margin:0 auto;"><i class="ti ti-alert-triangle" aria-hidden="true"></i></div>
+        <div style="font-size:16px;font-weight:500;margin-top:12px;">Couldn't load your people</div>
+        <div class="g" style="font-size:12px;margin-top:4px;">Check your connection and try again.</div>
+        <div style="margin-top:14px;">
+          <a href="recallr_people_list_sketch.html" class="btn" style="height:44px;padding:0 22px;display:inline-flex;font-size:13px;"><i class="ti ti-refresh" style="font-size:17px;" aria-hidden="true"></i>Try again</a>
+        </div>
+      </div>
+
+      <div class="sec">Undo toast</div>
+      <div style="background:#2b2b2b;color:#fff;border-radius:14px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+        <span>Contact deleted</span>
+        <a href="recallr_people_list_sketch.html" style="color:#FFB27F;font-weight:500;text-decoration:none;">Undo</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/nav-hub.js" defer></script>
+</body>
+</html>

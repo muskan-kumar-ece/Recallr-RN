@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recallr - Subscriptions & Pro</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.42.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </marker>
+    </defs>
+  </svg>
+
+  <div id="vis-container">
+    <h2 class="sr-only">Three Recallr subscription sketches: the Recallr Pro upgrade screen with yearly and monthly plans and a trial button, the Subscription and usage page showing free plan limits, and a limit-reached bottom sheet offering Pro or manual add.</h2>
+
+    <!-- Anchor Pills -->
+    <div class="screen-anchor-nav">
+      <a class="screen-anchor-pill active" href="#subscription-upgrade">1. Upgrade Screen</a>
+      <a class="screen-anchor-pill" href="#subscription-usage">2. Usage & Limits</a>
+      <a class="screen-anchor-pill" href="#subscription-limit">3. Limit Reached Sheet</a>
+    </div>
+
+    <!-- Screen 1: Upgrade Screen -->
+    <div class="lb">1. UPGRADE SCREEN</div>
+    <div class="p" id="subscription-upgrade" style="margin-bottom:32px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <a href="recallr_settings_sketch.html" class="ci" title="Close"><i class="ti ti-x" aria-hidden="true"></i></a>
+        <span style="font-size:12px;color:#6b6b66;cursor:pointer;">Restore</span>
+      </div>
+
+      <div style="text-align:center;margin-top:6px;">
+        <div class="ic" style="margin:0 auto;background:#FDEBDD;color:#E8641B;width:56px;height:56px;border-radius:18px;font-size:28px;">
+          <i class="ti ti-crown" aria-hidden="true"></i>
+        </div>
+        <div style="font-size:24px;font-weight:600;margin-top:12px;letter-spacing:-0.3px;">Recallr Pro</div>
+        <div class="g" style="font-size:13px;margin-top:4px;">Your whole network, no limits.</div>
+      </div>
+
+      <div class="c" style="margin-top:16px;padding:8px 16px;">
+        <div class="ft"><i class="ti ti-check" aria-hidden="true"></i>Unlimited contacts and card scans</div>
+        <div class="ft"><i class="ti ti-check" aria-hidden="true"></i>Unlimited AI questions and actions</div>
+        <div class="ft"><i class="ti ti-check" aria-hidden="true"></i>Multiple digital business cards</div>
+        <div class="ft"><i class="ti ti-check" aria-hidden="true"></i>5 GB cloud storage for documents</div>
+        <div class="ft"><i class="ti ti-check" aria-hidden="true"></i>Continuous export and backup</div>
+      </div>
+
+      <div class="seg" style="margin-top:16px;">
+        <span>Monthly</span>
+        <span class="s">Yearly · Save 33%</span>
+      </div>
+
+      <div class="c pl sel" style="margin-top:12px;">
+        <div style="font-weight:500;">Yearly</div>
+        <div class="g" style="font-size:12px;">₹1,199 per year · about ₹100 a month</div>
+        <div class="o" style="width:52px;height:42px;font-size:20px;"><i class="ti ti-check" aria-hidden="true"></i></div>
+      </div>
+
+      <div class="c pl" style="margin-top:10px;">
+        <div style="font-weight:500;">Monthly</div>
+        <div class="g" style="font-size:12px;">₹149 per month</div>
+      </div>
+
+      <a href="recallr_home_screen_sketch.html" class="btn" style="margin-top:16px;">
+        Start 7-day free trial
+      </a>
+      <div class="g" style="text-align:center;margin-top:10px;">Then ₹1,199 per year. Cancel anytime in your store account.</div>
+      <div class="g" style="text-align:center;margin-top:6px;">Terms · Privacy</div>
+    </div>
+
+    <!-- Screen 2: Subscription & Usage -->
+    <div class="lb">2. SUBSCRIPTION AND USAGE (Settings)</div>
+    <div class="p" id="subscription-usage" style="margin-bottom:32px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <a href="recallr_settings_sketch.html" class="ci" title="Back to Settings"><i class="ti ti-arrow-left" aria-hidden="true"></i></a>
+        <div style="font-size:18px;font-weight:500;">Subscription</div>
+      </div>
+
+      <a href="#subscription-upgrade" class="c" style="margin-top:14px;padding:16px 16px 22px;display:block;text-decoration:none;color:inherit;">
+        <div class="g">Current plan</div>
+        <div style="font-size:20px;font-weight:500;margin-top:2px;">Free</div>
+        <div class="g" style="font-size:12px;margin-top:2px;">Upgrade for unlimited everything</div>
+        <div class="o" style="width:96px;height:50px;font-size:13px;font-weight:500;padding-left:18px;">Upgrade</div>
+      </a>
+
+      <div style="font-size:12px;color:#6b6b66;margin:16px 4px 6px;">Your usage</div>
+      <div class="c" style="padding:12px 16px;">
+        <div style="display:flex;justify-content:space-between;font-size:13px;"><span>Contacts</span><span class="g" style="font-size:12px;">38 of 50</span></div>
+        <div class="pb"><i style="width:76%;"></i></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:14px;"><span>Card scans this month</span><span class="g" style="font-size:12px;">7 of 10</span></div>
+        <div class="pb"><i style="width:70%;"></i></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-top:14px;"><span>AI questions today</span><span class="g" style="font-size:12px;">3 of 5</span></div>
+        <div class="pb"><i style="width:60%;"></i></div>
+      </div>
+
+      <div class="c" style="margin-top:14px;">
+        <a href="#subscription-upgrade" class="fr"><span>Restore purchases</span><i class="ti ti-chevron-right" style="color:#b5b2aa;" aria-hidden="true"></i></a>
+        <div class="fr"><span>Manage in store account</span><i class="ti ti-external-link" style="color:#b5b2aa;" aria-hidden="true"></i></div>
+      </div>
+    </div>
+
+    <!-- Screen 3: Limit Reached -->
+    <div class="lb">3. LIMIT REACHED (appears when needed)</div>
+    <div class="p" id="subscription-limit" style="padding:0;overflow:hidden;">
+      <a href="recallr_home_screen_sketch.html" style="height:46px;background:#E4E2DC;display:flex;align-items:center;justify-content:center;font-size:12px;color:#8a8a85;text-decoration:none;">
+        <i class="ti ti-chevron-down" style="margin-right:4px;"></i> Scan screen behind is dimmed
+      </a>
+      <div style="background:#F8F7F4;border-top-left-radius:24px;border-top-right-radius:24px;margin-top:-14px;position:relative;padding:12px 16px 20px;text-align:center;">
+        <div style="width:40px;height:4px;border-radius:2px;background:#d6d3cc;margin:0 auto 14px;"></div>
+        <div class="ic" style="margin:0 auto;width:56px;height:56px;border-radius:18px;font-size:28px;"><i class="ti ti-scan" aria-hidden="true"></i></div>
+        <div style="font-size:18px;font-weight:500;margin-top:12px;">You've used all 10 scans this month</div>
+        <div class="g" style="font-size:13px;margin-top:6px;">Go Pro for unlimited scans, or add this contact manually for free.</div>
+        <a href="#subscription-upgrade" class="btn" style="margin-top:16px;">See Recallr Pro</a>
+        <a href="recallr_edit_share_merge.html#edit-contact" class="btn2" style="margin-top:10px;">Add manually</a>
+        <a href="recallr_home_screen_sketch.html" class="g" style="display:block;margin-top:12px;font-size:12px;cursor:pointer;">Maybe later</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/nav-hub.js" defer></script>
+</body>
+</html>

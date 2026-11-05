@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "Recallr",
+    "slug": "recallr",
+    "scheme": "recallr",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#F8F7F4",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.recallr.mobile"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#F8F7F4",
+        "foregroundImage": "./assets/android-icon-foreground.png"
+      },
+      "package": "app.recallr.mobile"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

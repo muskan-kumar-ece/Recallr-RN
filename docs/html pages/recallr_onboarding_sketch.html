@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recallr - Onboarding Flow</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.42.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </marker>
+    </defs>
+  </svg>
+
+  <div id="vis-container">
+    <h2 class="sr-only">Three Recallr onboarding sketches: a welcome slide with stacked cards illustration, a sign in screen with phone and Google options, and a starter categories picker with selected cards.</h2>
+
+    <!-- Anchor Pills -->
+    <div class="screen-anchor-nav">
+      <a class="screen-anchor-pill active" href="#onboarding-welcome">1. Welcome</a>
+      <a class="screen-anchor-pill" href="#onboarding-sign-in">2. Sign In</a>
+      <a class="screen-anchor-pill" href="#onboarding-categories">3. Categories</a>
+    </div>
+
+    <!-- Screen 1: Welcome -->
+    <div class="lb">1. WELCOME (slide 1 of 3)</div>
+    <div class="p" id="onboarding-welcome" style="margin-bottom:32px;">
+      <div style="text-align:right;">
+        <a href="recallr_home_screen_sketch.html" style="font-size:13px;color:#6b6b66;text-decoration:none;">Skip</a>
+      </div>
+
+      <!-- Illustrated Card Stack -->
+      <div style="position:relative;height:210px;margin-top:4px;">
+        <div class="c" style="position:absolute;left:18px;top:14px;width:200px;height:118px;transform:rotate(-8deg);">
+          <div style="position:absolute;left:12px;top:12px;width:20px;height:20px;border-radius:6px;background:#E8641B;"></div>
+          <div class="bar" style="position:absolute;left:12px;bottom:14px;width:70px;"></div>
+          <div class="o" style="width:104px;height:70px;border-top-left-radius:44px;"></div>
+        </div>
+        <div class="c" style="position:absolute;left:96px;top:52px;width:210px;height:124px;transform:rotate(5deg);box-shadow:0 8px 20px rgba(0,0,0,.08);">
+          <div style="position:absolute;left:14px;top:14px;width:22px;height:22px;border-radius:7px;background:#E8641B;"></div>
+          <div class="bar" style="position:absolute;left:14px;bottom:30px;width:80px;"></div>
+          <div class="bar" style="position:absolute;left:14px;bottom:16px;width:56px;"></div>
+          <div class="o" style="width:108px;height:74px;border-top-left-radius:46px;">
+            <div style="width:34px;height:34px;background:#fff;border-radius:6px;margin-left:-10px;display:flex;align-items:center;justify-content:center;color:#2b2b2b;font-size:22px;">
+              <i class="ti ti-qrcode" aria-hidden="true"></i>
+            </div>
+          </div>
+        </div>
+        <a href="recallr_ask_ai_chat_sketch.html" class="c" style="position:absolute;left:10px;bottom:6px;padding:8px 14px;border-radius:20px;font-size:12px;display:flex;align-items:center;gap:6px;text-decoration:none;color:inherit;">
+          <i class="ti ti-sparkles" style="color:#E8641B;font-size:16px;" aria-hidden="true"></i>Who is Ramesh?
+        </a>
+      </div>
+
+      <div style="font-size:24px;font-weight:600;line-height:1.25;margin-top:10px;">Remember everyone you meet</div>
+      <div class="g" style="font-size:14px;line-height:1.5;margin-top:8px;">
+        Scan a business card and Recallr saves the person, the place you met and what you talked about.
+      </div>
+      <div style="display:flex;gap:6px;margin:20px 0;justify-content:center;">
+        <span style="width:22px;height:6px;border-radius:3px;background:#E8641B;"></span>
+        <span style="width:6px;height:6px;border-radius:3px;background:#d6d3cc;"></span>
+        <span style="width:6px;height:6px;border-radius:3px;background:#d6d3cc;"></span>
+      </div>
+      <a href="#onboarding-sign-in" class="btn">Continue</a>
+    </div>
+
+    <!-- Screen 2: Sign In -->
+    <div class="lb">2. SIGN IN</div>
+    <div class="p" id="onboarding-sign-in" style="margin-bottom:32px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-top:6px;">
+        <div style="width:40px;height:40px;border-radius:12px;background:#E8641B;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:20px;">R</div>
+        <div style="font-size:20px;font-weight:600;">Recallr</div>
+      </div>
+      <div style="font-size:24px;font-weight:600;line-height:1.25;margin-top:22px;">Create your account</div>
+      <div class="g" style="font-size:14px;margin-top:6px;">Your network, safe and always with you.</div>
+
+      <div class="c" style="margin-top:20px;height:50px;display:flex;align-items:center;padding:0 16px;gap:10px;">
+        <span style="font-size:14px;font-weight:500;">+91</span>
+        <span style="width:1px;height:20px;background:#e3e0d9;"></span>
+        <span style="color:#8a8a85;">Phone number</span>
+      </div>
+      <a href="#onboarding-categories" class="btn" style="margin-top:14px;">Send OTP</a>
+      <div style="display:flex;align-items:center;gap:10px;margin:16px 0;color:#8a8a85;font-size:12px;">
+        <span style="flex:1;height:0.5px;background:#d6d3cc;"></span>or<span style="flex:1;height:0.5px;background:#d6d3cc;"></span>
+      </div>
+      <a href="#onboarding-categories" class="btn2">
+        <i class="ti ti-brand-google" style="font-size:20px;" aria-hidden="true"></i>Continue with Google
+      </a>
+      <div class="g" style="text-align:center;margin-top:16px;font-size:11px;">By continuing you agree to the Terms and Privacy Policy.</div>
+    </div>
+
+    <!-- Screen 3: Pick Starter Categories -->
+    <div class="lb">3. PICK STARTER CATEGORIES</div>
+    <div class="p" id="onboarding-categories">
+      <div style="font-size:22px;font-weight:600;line-height:1.25;">Who do you want to remember?</div>
+      <div class="g" style="font-size:14px;margin-top:6px;">Pick a few to start. You can change these anytime.</div>
+
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px;">
+        <div class="c cat sel">
+          <div style="display:flex;justify-content:space-between;">
+            <div class="ic"><i class="ti ti-school" aria-hidden="true"></i></div>
+            <i class="ti ti-circle-check-filled" style="color:#E8641B;font-size:22px;" aria-hidden="true"></i>
+          </div>
+          <div style="font-weight:500;font-size:13px;margin-top:8px;">School Friends</div>
+        </div>
+        <div class="c cat">
+          <div class="ic"><i class="ti ti-briefcase" aria-hidden="true"></i></div>
+          <div style="font-weight:500;font-size:13px;margin-top:8px;">Colleagues</div>
+        </div>
+        <div class="c cat sel">
+          <div style="display:flex;justify-content:space-between;">
+            <div class="ic"><i class="ti ti-code" aria-hidden="true"></i></div>
+            <i class="ti ti-circle-check-filled" style="color:#E8641B;font-size:22px;" aria-hidden="true"></i>
+          </div>
+          <div style="font-weight:500;font-size:13px;margin-top:8px;">App Developers</div>
+        </div>
+        <div class="c cat">
+          <div class="ic"><i class="ti ti-building-store" aria-hidden="true"></i></div>
+          <div style="font-weight:500;font-size:13px;margin-top:8px;">Clients</div>
+        </div>
+        <div class="c cat sel">
+          <div style="display:flex;justify-content:space-between;">
+            <div class="ic"><i class="ti ti-truck-delivery" aria-hidden="true"></i></div>
+            <i class="ti ti-circle-check-filled" style="color:#E8641B;font-size:22px;" aria-hidden="true"></i>
+          </div>
+          <div style="font-weight:500;font-size:13px;margin-top:8px;">Suppliers</div>
+        </div>
+        <a href="recallr_categories_sketch.html#new-category" class="c cat" style="border-style:dashed;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#E8641B;text-decoration:none;">
+          <i class="ti ti-plus" style="font-size:22px;" aria-hidden="true"></i>
+          <span style="font-size:13px;">Create your own</span>
+        </a>
+      </div>
+
+      <a href="recallr_home_screen_sketch.html" class="btn" style="margin-top:18px;">
+        Continue (3 selected)
+      </a>
+    </div>
+  </div>
+
+  <script src="js/nav-hub.js" defer></script>
+</body>
+</html>

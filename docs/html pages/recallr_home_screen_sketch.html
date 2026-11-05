@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recallr - Home</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.42.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </marker>
+    </defs>
+  </svg>
+
+  <div id="vis-container">
+    <h2 class="sr-only">Sketch of the Recallr home screen with a greeting, search, today card, quick actions, Ask AI card, category cards, follow-up list and bottom tab bar, all in a white card style with orange corner accents.</h2>
+
+    <div class="p">
+      <!-- Top Bar: Avatar Greeting & Notifications -->
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <a href="recallr_settings_sketch.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;" title="Open Profile & Settings">
+          <div style="width:40px;height:40px;border-radius:50%;background:#FDEBDD;color:#E8641B;display:flex;align-items:center;justify-content:center;font-weight:500;">MK</div>
+          <div><div class="g">Good morning</div><div style="font-size:18px;font-weight:500;">Muskan</div></div>
+        </a>
+        <a href="recallr_notes_reminders_sketch.html" class="ci" title="View Reminders & Notifications" style="width:40px;height:40px;font-size:20px;">
+          <i class="ti ti-bell" aria-hidden="true"></i>
+        </a>
+      </div>
+
+      <!-- Search Bar -->
+      <a href="recallr_search_and_states.html" style="margin-top:14px;height:44px;background:#fff;border:0.5px solid rgba(0,0,0,.08);border-radius:14px;display:flex;align-items:center;gap:8px;padding:0 14px;color:#8a8a85;font-size:14px;text-decoration:none;" title="Search people, notes, companies">
+        <i class="ti ti-search" style="font-size:18px;" aria-hidden="true"></i>Search people, notes, companies
+      </a>
+
+      <!-- Today's Follow-ups Card -->
+      <a href="recallr_notes_reminders_sketch.html" class="c" style="margin-top:14px;padding:16px 16px 18px;display:block;text-decoration:none;color:inherit;" title="Open Today's Reminders">
+        <div class="g">Today, 4 Nov</div>
+        <div style="font-size:20px;font-weight:500;margin:2px 0 10px;">3 follow-ups</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <div style="width:18px;height:18px;border-radius:50%;border:1.5px solid #E8641B;flex:none;"></div>
+          <div><div style="font-size:13px;">Call Ramesh about order</div><div class="g">10:30 AM</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+          <div style="width:18px;height:18px;border-radius:50%;border:1.5px solid #E8641B;flex:none;"></div>
+          <div><div style="font-size:13px;">Send proposal to Mukesh</div><div class="g">2:00 PM</div></div>
+        </div>
+        <div class="o" style="width:78px;height:58px;font-size:22px;padding-left:12px;box-sizing:border-box;"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+      </a>
+
+      <!-- Quick Action Buttons -->
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px;">
+        <a href="recallr_quick_add_and_scan_review.html#scan-review" class="q" title="Scan Business Card">
+          <div><i class="ti ti-scan" aria-hidden="true"></i></div>Scan card
+        </a>
+        <a href="recallr_edit_share_merge.html#edit-contact" class="q" title="Add Contact Manually">
+          <div><i class="ti ti-user-plus" aria-hidden="true"></i></div>Add person
+        </a>
+        <a href="recallr_notes_reminders_sketch.html#new-note" class="q" title="Create New Note">
+          <div><i class="ti ti-note" aria-hidden="true"></i></div>New note
+        </a>
+        <a href="recallr_edit_card_and_public_page.html" class="q" title="Digital Business Card">
+          <div><i class="ti ti-qrcode" aria-hidden="true"></i></div>My card
+        </a>
+      </div>
+
+      <!-- Ask Recallr AI Card -->
+      <a href="recallr_ask_ai_chat_sketch.html" class="c" style="margin-top:14px;padding:14px 16px 16px;display:block;text-decoration:none;color:inherit;" title="Ask Recallr AI">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="ic"><i class="ti ti-sparkles" aria-hidden="true"></i></div>
+          <div style="font-weight:500;">Ask Recallr</div>
+        </div>
+        <div style="margin-top:10px;font-size:13px;color:#8a8a85;width:62%;">Who is Ramesh? Who do I know in plastics?</div>
+        <div class="o" style="width:78px;height:58px;font-size:22px;padding-left:12px;box-sizing:border-box;"><i class="ti ti-arrow-up" aria-hidden="true"></i></div>
+      </a>
+
+      <!-- Categories Section -->
+      <div class="h"><span>Categories</span><a href="recallr_categories_sketch.html#categories-overview">See all</a></div>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;">
+        <a href="recallr_categories_sketch.html#category-detail" class="c cat">
+          <div class="ic"><i class="ti ti-school" aria-hidden="true"></i></div>
+          <div style="font-weight:500;margin-top:8px;font-size:13px;">School Friends</div>
+          <div class="g">2 new this week</div>
+          <div class="o" style="width:48px;height:38px;font-size:14px;font-weight:500;padding-left:8px;box-sizing:border-box;">24</div>
+        </a>
+        <a href="recallr_categories_sketch.html#category-detail" class="c cat">
+          <div class="ic"><i class="ti ti-code" aria-hidden="true"></i></div>
+          <div style="font-weight:500;margin-top:8px;font-size:13px;">App Developers</div>
+          <div class="g">Updated today</div>
+          <div class="o" style="width:48px;height:38px;font-size:14px;font-weight:500;padding-left:8px;box-sizing:border-box;">18</div>
+        </a>
+        <a href="recallr_categories_sketch.html#category-detail" class="c cat">
+          <div class="ic"><i class="ti ti-building-factory-2" aria-hidden="true"></i></div>
+          <div style="font-weight:500;margin-top:8px;font-size:13px;">Plastic Business</div>
+          <div class="g">Updated 3 days ago</div>
+          <div class="o" style="width:48px;height:38px;font-size:14px;font-weight:500;padding-left:8px;box-sizing:border-box;">9</div>
+        </a>
+        <a href="recallr_categories_sketch.html#new-category" class="c cat" style="border-style:dashed;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#E8641B;gap:4px;">
+          <i class="ti ti-plus" style="font-size:22px;" aria-hidden="true"></i>
+          <span style="font-size:13px;">New category</span>
+        </a>
+      </div>
+
+      <!-- Needs Follow-up Section -->
+      <div class="h"><span>Needs follow-up</span><a href="recallr_notes_reminders_sketch.html">View all</a></div>
+      <div class="c">
+        <a href="recallr_contact_profile_sketch.html" class="r" style="padding:12px 14px;text-decoration:none;color:inherit;">
+          <div style="width:38px;height:38px;border-radius:50%;background:#FDEBDD;color:#E8641B;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:13px;">RK</div>
+          <div style="flex:1;min-width:0;"><div style="font-weight:500;font-size:14px;">Ramesh</div><div class="g">Plastic factory owner · 32 days ago</div></div>
+          <span class="ci" style="border:1px solid #E8641B;color:#E8641B;font-size:17px;"><i class="ti ti-phone" aria-hidden="true"></i></span>
+        </a>
+        <a href="recallr_contact_profile_sketch.html" class="r" style="padding:12px 14px;text-decoration:none;color:inherit;">
+          <div style="width:38px;height:38px;border-radius:50%;background:#FDEBDD;color:#E8641B;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:13px;">MS</div>
+          <div style="flex:1;min-width:0;"><div style="font-weight:500;font-size:14px;">Mukesh</div><div class="g">Local shop · 41 days ago</div></div>
+          <span class="ci" style="border:1px solid #E8641B;color:#E8641B;font-size:17px;"><i class="ti ti-phone" aria-hidden="true"></i></span>
+        </a>
+      </div>
+
+      <!-- Bottom Tab Bar -->
+      <div class="c" style="margin-top:16px;border-radius:22px;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;overflow:visible;">
+        <a class="t active" href="recallr_home_screen_sketch.html"><i class="ti ti-home" style="font-size:22px;" aria-hidden="true"></i>Home</a>
+        <a class="t" href="recallr_people_list_sketch.html"><i class="ti ti-users" style="font-size:22px;" aria-hidden="true"></i>People</a>
+        <a href="recallr_quick_add_and_scan_review.html" title="Quick Add" style="width:48px;height:48px;border-radius:50%;background:#E8641B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;margin-top:-22px;border:4px solid #F8F7F4;box-sizing:content-box;text-decoration:none;"><i class="ti ti-plus" aria-hidden="true"></i></a>
+        <a class="t" href="recallr_notes_reminders_sketch.html"><i class="ti ti-note" style="font-size:22px;" aria-hidden="true"></i>Notes</a>
+        <a class="t" href="recallr_ask_ai_chat_sketch.html"><i class="ti ti-sparkles" style="font-size:22px;" aria-hidden="true"></i>Ask AI</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/nav-hub.js" defer></script>
+</body>
+</html>

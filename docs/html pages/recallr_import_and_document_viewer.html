@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recallr - Import Contacts & Document Viewer</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.42.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </marker>
+    </defs>
+  </svg>
+
+  <div id="vis-container">
+    <h2 class="sr-only">Three Recallr sketches: the import contacts permission explainer, the contact picker with selected and already-added contacts and an import bar, and the document viewer showing a PDF preview with details and actions.</h2>
+
+    <!-- Anchor Pills -->
+    <div class="screen-anchor-nav">
+      <a class="screen-anchor-pill active" href="#import-permission">1. Permission</a>
+      <a class="screen-anchor-pill" href="#pick-contacts">2. Pick Contacts</a>
+      <a class="screen-anchor-pill" href="#document-viewer">3. Document Viewer</a>
+    </div>
+
+    <!-- Screen 1: Import Permission -->
+    <div class="lb">1. IMPORT PERMISSION</div>
+    <div class="p" id="import-permission" style="margin-bottom:32px;text-align:center;padding:24px 18px 24px;">
+      <div class="ic" style="margin:0 auto;width:48px;height:48px;border-radius:16px;font-size:24px;">
+        <i class="ti ti-address-book" aria-hidden="true"></i>
+      </div>
+      <div style="font-size:22px;font-weight:600;line-height:1.25;margin-top:16px;">Import from your phone</div>
+      <div class="g" style="font-size:13px;line-height:1.5;margin-top:8px;">
+        Bring in the contacts you want. Recallr only reads them to show you the list, and nothing is added until you choose.
+      </div>
+      <div class="c" style="margin-top:16px;padding:12px 14px;text-align:left;display:flex;gap:10px;align-items:center;">
+        <i class="ti ti-lock" style="color:#E8641B;font-size:20px;flex:none;" aria-hidden="true"></i>
+        <span style="font-size:12px;color:#6b6b66;">You pick who to import. You can revoke access anytime in phone settings.</span>
+      </div>
+      <a href="#pick-contacts" class="btn" style="margin-top:18px;">Allow contacts access</a>
+      <a href="recallr_home_screen_sketch.html" style="display:block;font-size:13px;color:#6b6b66;margin-top:14px;cursor:pointer;">Not now</a>
+    </div>
+
+    <!-- Screen 2: Pick Contacts -->
+    <div class="lb">2. PICK CONTACTS</div>
+    <div class="p" id="pick-contacts" style="margin-bottom:32px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <a href="#import-permission" class="ci" title="Back to Permission"><i class="ti ti-arrow-left" aria-hidden="true"></i></a>
+        <div style="font-size:18px;font-weight:500;">Import contacts</div>
+      </div>
+      <div style="margin-top:12px;height:42px;background:#fff;border:0.5px solid rgba(0,0,0,.08);border-radius:14px;display:flex;align-items:center;gap:8px;padding:0 14px;color:#8a8a85;font-size:13px;">
+        <i class="ti ti-search" style="font-size:17px;" aria-hidden="true"></i>Search phone contacts
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 4px 8px;font-size:12px;">
+        <span class="g" style="font-size:12px;">142 contacts</span>
+        <span style="color:#E8641B;cursor:pointer;">Select all</span>
+      </div>
+      <div class="c">
+        <div class="r"><span class="ck t"><i class="ti ti-check" aria-hidden="true"></i></span><div class="av">AS</div><div style="flex:1;min-width:0;"><div>Aarav Sharma</div><div class="g">+91 90000 11111</div></div></div>
+        <div class="r"><span class="ck t"><i class="ti ti-check" aria-hidden="true"></i></span><div class="av">MP</div><div style="flex:1;min-width:0;"><div>Meena Patel</div><div class="g">+91 90000 22222</div></div></div>
+        <div class="r"><span class="ck t"><i class="ti ti-check" aria-hidden="true"></i></span><div class="av">SG</div><div style="flex:1;min-width:0;"><div>Suresh Goud</div><div class="g">+91 90000 33333</div></div></div>
+        <div class="r"><span class="ck"></span><div class="av">VR</div><div style="flex:1;min-width:0;"><div>Vijay Rao</div><div class="g">+91 90000 44444</div></div></div>
+        <div class="r" style="opacity:.55;"><span class="ck" style="background:#EDEBE5;border-color:#EDEBE5;color:#8a8a85;"><i class="ti ti-check" aria-hidden="true"></i></span><div class="av">RK</div><div style="flex:1;min-width:0;"><div>Ramesh Kumar</div><div class="g">Already in Recallr</div></div></div>
+      </div>
+      <div class="c" style="margin-top:14px;padding:12px 14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:13px;">
+          <span style="font-weight:500;">3 selected</span>
+          <a href="recallr_categories_sketch.html#category-detail" style="color:#6b6b66;display:flex;align-items:center;gap:4px;text-decoration:none;">
+            Category: <span style="color:#E8641B;">Plastic Business</span><i class="ti ti-chevron-down" style="font-size:14px;" aria-hidden="true"></i>
+          </a>
+        </div>
+        <a href="recallr_people_list_sketch.html" class="btn" style="margin-top:10px;height:46px;">Import 3 contacts</a>
+      </div>
+    </div>
+
+    <!-- Screen 3: Document Viewer -->
+    <div class="lb">3. DOCUMENT VIEWER</div>
+    <div class="p" id="document-viewer">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <a href="recallr_contact_profile_sketch.html" class="ci" title="Back to Contact Profile"><i class="ti ti-arrow-left" aria-hidden="true"></i></a>
+        <div style="font-size:16px;font-weight:500;">Quote.pdf</div>
+        <div class="ci"><i class="ti ti-dots" aria-hidden="true"></i></div>
+      </div>
+      <div class="c" style="margin-top:12px;padding:18px 18px 22px;height:200px;box-sizing:border-box;">
+        <div style="width:28px;height:28px;border-radius:8px;background:#E8641B;margin-bottom:14px;"></div>
+        <div class="bar" style="width:55%;height:8px;"></div>
+        <div class="bar" style="width:90%;"></div>
+        <div class="bar" style="width:82%;"></div>
+        <div class="bar" style="width:88%;"></div>
+        <div class="bar" style="width:60%;"></div>
+        <div class="o" style="width:110px;height:70px;border-top-left-radius:50px;"></div>
+      </div>
+      <div class="g" style="text-align:center;margin-top:8px;">Page 1 of 2</div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px;">
+        <div class="sq"><div><i class="ti ti-share-2" aria-hidden="true"></i></div>Share</div>
+        <div class="sq"><div><i class="ti ti-external-link" aria-hidden="true"></i></div>Open in</div>
+        <a href="recallr_contact_profile_sketch.html" class="sq"><div style="color:#D9483B;"><i class="ti ti-trash" aria-hidden="true"></i></div>Delete</a>
+      </div>
+
+      <div class="c" style="margin-top:12px;">
+        <div class="fr"><span class="g">Attached to</span><a href="recallr_contact_profile_sketch.html" class="chip">Ramesh Kumar</a></div>
+        <div class="fr"><span class="g">Added</span><span>2 Oct 2026</span></div>
+        <div class="fr"><span class="g">Size</span><span>240 KB</span></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/nav-hub.js" defer></script>
+</body>
+</html>

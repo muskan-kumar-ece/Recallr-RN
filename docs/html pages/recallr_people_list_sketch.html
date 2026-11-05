@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recallr - People Directory</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.42.0/dist/tabler-icons.min.css">
+  <link rel="stylesheet" href="css/global.css">
+</head>
+<body>
+  <svg style="position:absolute;width:0;height:0" aria-hidden="true">
+    <defs>
+      <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </marker>
+    </defs>
+  </svg>
+
+  <div id="vis-container">
+    <h2 class="sr-only">Sketch of the Recallr People list with search, follow-up card, category chips, A-Z grouped contacts, a swiped row showing Call and Delete actions, an A-Z index and the bottom tab bar.</h2>
+
+    <div class="p">
+      <!-- Header -->
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:22px;font-weight:500;">People</div>
+          <div class="g">86 people in 4 categories</div>
+        </div>
+        <a href="recallr_categories_sketch.html" class="ci" style="font-size:20px;" title="Manage Categories">
+          <i class="ti ti-adjustments-horizontal" aria-hidden="true"></i>
+        </a>
+      </div>
+
+      <!-- Search Input -->
+      <a href="recallr_search_and_states.html" style="margin-top:12px;height:44px;background:#fff;border:0.5px solid rgba(0,0,0,.08);border-radius:14px;display:flex;align-items:center;gap:8px;padding:0 14px;color:#8a8a85;font-size:14px;text-decoration:none;" title="Search contacts">
+        <i class="ti ti-search" style="font-size:18px;" aria-hidden="true"></i>Search name, company, note
+      </a>
+
+      <!-- Follow-up Alert Card -->
+      <a href="recallr_notes_reminders_sketch.html" class="c" style="margin-top:12px;padding:12px 16px;display:block;text-decoration:none;color:inherit;" title="View Due Follow-ups">
+        <div style="font-weight:500;">5 need follow-up</div>
+        <div class="g">Not contacted in 30+ days</div>
+        <div class="o" style="width:56px;height:44px;font-size:20px;"><i class="ti ti-arrow-right" aria-hidden="true"></i></div>
+      </a>
+
+      <!-- Category Filter Chips -->
+      <div class="chip-scroll" style="display:flex;gap:8px;margin-top:12px;">
+        <span class="chip on">All</span>
+        <a href="recallr_categories_sketch.html#category-detail" class="chip">School Friends</a>
+        <a href="recallr_categories_sketch.html#category-detail" class="chip">App Developers</a>
+        <a href="recallr_categories_sketch.html#category-detail" class="chip">Plastic Business</a>
+      </div>
+
+      <!-- Sorting Bar -->
+      <div style="display:flex;justify-content:space-between;margin:12px 4px 0;font-size:12px;color:#6b6b66;">
+        <span><i class="ti ti-arrows-sort" style="font-size:14px;vertical-align:-2px;" aria-hidden="true"></i> A to Z</span>
+        <a href="recallr_edit_share_merge.html#merge-duplicates" style="color:#E8641B;">Select / Merge</a>
+      </div>
+
+      <!-- Contact List -->
+      <div style="position:relative;margin-right:14px;">
+        <div class="l">A</div>
+        <div class="c">
+          <a href="recallr_contact_profile_sketch.html" class="r">
+            <div class="av">AS</div>
+            <div style="flex:1;min-width:0;"><div style="font-weight:500;">Aarav Sharma</div><div class="g">Flutter developer · Pixel Labs</div></div>
+            <span class="tag">App Dev</span>
+          </a>
+          <a href="recallr_contact_profile_sketch.html" class="r" style="border-bottom:none;">
+            <div class="av">AR</div>
+            <div style="flex:1;min-width:0;"><div style="font-weight:500;">Anita Reddy</div><div class="g">Classmate · 10th batch</div></div>
+            <span class="tag">School</span>
+          </a>
+        </div>
+
+        <div class="l">M</div>
+        <div class="c" style="background:#fff;">
+          <div style="position:absolute;right:0;top:0;bottom:0;display:flex;">
+            <a href="tel:+919876511122" style="width:64px;background:#E8641B;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;gap:2px;text-decoration:none;"><i class="ti ti-phone" style="font-size:20px;" aria-hidden="true"></i>Call</a>
+            <a href="recallr_search_and_states.html#shared-states" style="width:64px;background:#D9483B;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;gap:2px;text-decoration:none;"><i class="ti ti-trash" style="font-size:20px;" aria-hidden="true"></i>Delete</a>
+          </div>
+          <a href="recallr_contact_profile_sketch.html" class="r" style="position:relative;transform:translateX(-128px);width:100%;box-sizing:border-box;">
+            <div class="av">MS</div>
+            <div style="flex:1;min-width:0;"><div style="font-weight:500;">Mukesh Shah</div><div class="g">Local shop · 41 days ago</div></div>
+            <span class="tag">Local Shop</span>
+          </a>
+        </div>
+        <div class="c" style="margin-top:8px;">
+          <a href="recallr_contact_profile_sketch.html" class="r" style="border-bottom:none;">
+            <div class="av">MP</div>
+            <div style="flex:1;min-width:0;"><div style="font-weight:500;">Meena Patel</div><div class="g">Packaging supplier · 6 days ago</div></div>
+            <span class="tag">Plastic</span>
+          </a>
+        </div>
+
+        <div class="l">R</div>
+        <div class="c">
+          <a href="recallr_contact_profile_sketch.html" class="r">
+            <div class="av">RK</div>
+            <div style="flex:1;min-width:0;"><div style="font-weight:500;">Ramesh Kumar</div><div class="g"><span class="dot"></span>Plastic factory owner · 32 days ago</div></div>
+            <span class="tag">Plastic</span>
+          </a>
+          <a href="recallr_contact_profile_sketch.html" class="r" style="border-bottom:none;">
+            <div class="av">RN</div>
+            <div style="flex:1;min-width:0;"><div style="font-weight:500;">Rohit Nair</div><div class="g">Backend developer · 2 days ago</div></div>
+            <span class="tag">App Dev</span>
+          </a>
+        </div>
+
+        <!-- A-Z Alphabet Strip -->
+        <div style="position:absolute;right:-12px;top:30px;display:flex;flex-direction:column;gap:2px;font-size:11px;color:#8a8a85;line-height:1.3;text-align:center;">
+          <span>A</span><span>C</span><span>F</span><span>J</span><span style="color:#E8641B;font-weight:600;">M</span><span>P</span><span>R</span><span>W</span>
+        </div>
+      </div>
+
+      <!-- Bottom Tab Bar -->
+      <div class="c" style="margin-top:16px;border-radius:22px;padding:8px 14px;display:flex;align-items:center;justify-content:space-between;overflow:visible;">
+        <a class="t" href="recallr_home_screen_sketch.html"><i class="ti ti-home" style="font-size:22px;" aria-hidden="true"></i>Home</a>
+        <a class="t active" href="recallr_people_list_sketch.html"><i class="ti ti-users" style="font-size:22px;" aria-hidden="true"></i>People</a>
+        <a href="recallr_quick_add_and_scan_review.html" title="Quick Add" style="width:48px;height:48px;border-radius:50%;background:#E8641B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;margin-top:-22px;border:4px solid #F8F7F4;box-sizing:content-box;text-decoration:none;"><i class="ti ti-plus" aria-hidden="true"></i></a>
+        <a class="t" href="recallr_notes_reminders_sketch.html"><i class="ti ti-note" style="font-size:22px;" aria-hidden="true"></i>Notes</a>
+        <a class="t" href="recallr_ask_ai_chat_sketch.html"><i class="ti ti-sparkles" style="font-size:22px;" aria-hidden="true"></i>Ask AI</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/nav-hub.js" defer></script>
+</body>
+</html>

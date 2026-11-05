@@ -1,0 +1,53 @@
+export const tokens = {
+  colors: {
+    bg: '#F8F7F4',
+    surface: '#FFFFFF',
+    border: 'rgba(0,0,0,0.08)',
+    text: '#2B2B2B',
+    textSecondary: '#6B6B66',
+    textMuted: '#8A8A85',
+    accent: '#E8641B',
+    accentTint: '#FDEBDD',
+    accentTintSoft: '#FFF9F4',
+    accentDark: '#B84A10',
+    danger: '#D9483B',
+    dangerTint: '#FBE5E2',
+    success: '#3B6D11',
+    fill: '#ECE9E3',
+    toastBg: '#2B2B2B',
+  },
+  categories: {
+    orange: '#E8641B',
+    indigo: '#4F5BD5',
+    teal: '#1D9E75',
+    pink: '#D4537E',
+    slate: '#444441',
+  },
+  typography: {
+    fontFamily: 'Inter',
+    titleLg: { size: 24, weight: 500, lineHeight: 1.4 },
+    title: { size: 21, weight: 500, lineHeight: 1.4 },
+    section: { size: 15, weight: 500, lineHeight: 1.4 },
+    body: { size: 14, weight: 400, lineHeight: 1.4 },
+    bodyStrong: { size: 14, weight: 500, lineHeight: 1.4 },
+    small: { size: 12, weight: 400, lineHeight: 1.4 },
+    caption: { size: 11, weight: 400, lineHeight: 1.4 },
+  },
+  radius: {
+    xs: 6,
+    sm: 10,
+    md: 14,
+    card: 16,
+    chip: 20,
+    sheet: 24,
+    button: 25,
+    full: 9999,
+  },
+  spacing: {
+    screenPadding: 14,
+    gapCards: 12,
+    gapSections: 18,
+  },
+} as const;
+
+export type Tokens = typeof tokens;

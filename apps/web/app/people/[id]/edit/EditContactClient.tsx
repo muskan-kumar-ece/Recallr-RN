@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { IconX, IconTrash, IconCamera } from '@tabler/icons-react';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
 import { Avatar } from '@/components/ui/Avatar';
@@ -19,11 +19,11 @@ import {
   uploadStorageFile,
 } from '@recallr/api';
 import { useRecallrAuth } from '@/providers/RecallrProvider';
+import { useRouteParam } from '@/hooks/useRouteParam';
 
 export default function EditContactClient() {
   const router = useRouter();
-  const params = useParams();
-  const contactId = params?.id as string;
+  const contactId = useRouteParam('id');
   const { user } = useRecallrAuth();
 
   const { data: dbContact, isLoading: isContactLoading } = useContact(contactId);

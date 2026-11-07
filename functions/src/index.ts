@@ -5,6 +5,12 @@ import { getAuth } from 'firebase-admin/auth';
 import { getStorage } from 'firebase-admin/storage';
 import { onCall, onRequest, HttpsError } from 'firebase-functions/v2/https';
 import { onSchedule } from 'firebase-functions/v2/scheduler';
+import { setGlobalOptions } from 'firebase-functions/v2';
+
+setGlobalOptions({
+  region: 'us-central1',
+  invoker: 'public',
+});
 import { createHash, randomUUID } from 'node:crypto';
 import {
   PLANS,

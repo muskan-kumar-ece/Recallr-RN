@@ -1,15 +1,14 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { useParams } from 'next/navigation';
 import { NoteEditorView } from '@/components/notes/NoteEditorView';
 import { useNotes, useContacts } from '@recallr/api';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { useRouteParam } from '@/hooks/useRouteParam';
 
 export default function EditNoteClient() {
-  const params = useParams();
-  const noteId = Array.isArray(params?.id) ? params.id[0] : params?.id || '';
+  const noteId = useRouteParam('id');
 
   const { data: notes, isLoading } = useNotes();
   const { data: contacts } = useContacts();

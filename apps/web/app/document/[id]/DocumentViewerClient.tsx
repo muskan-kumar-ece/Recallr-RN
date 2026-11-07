@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
   IconDownload,
   IconShare,
@@ -20,11 +20,11 @@ import { Toast } from '@/components/ui/Toast';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { FieldRow } from '@/components/ui/FieldRow';
 import { useContact, useContactDocument, useContacts, useDeleteContactDocument, useRestoreContactDocument, useUpdateContactDocument } from '@recallr/api';
+import { useRouteParam } from '@/hooks/useRouteParam';
 
 export default function DocumentViewerClient() {
   const router = useRouter();
-  const params = useParams();
-  const docId = params?.id as string;
+  const docId = useRouteParam('id');
   const { data: file } = useContactDocument(docId || '');
   const { data: contact } = useContact(file?.contact_id || '');
   const { data: contacts = [] } = useContacts();

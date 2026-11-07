@@ -1,15 +1,15 @@
 'use client';
 
 import React from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { ShareContactSheet } from '@/components/people/ShareContactSheet';
 import { useContact } from '@recallr/api';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { useRouteParam } from '@/hooks/useRouteParam';
 
 export default function ShareContactClient() {
   const router = useRouter();
-  const params = useParams();
-  const contactId = params?.id as string;
+  const contactId = useRouteParam('id');
   const { data: contact, isLoading } = useContact(contactId);
 
   if (isLoading) {

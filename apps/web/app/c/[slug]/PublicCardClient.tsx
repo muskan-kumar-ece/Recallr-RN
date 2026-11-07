@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useParams } from 'next/navigation';
 import {
   IconPhone,
   IconBrandWhatsapp,
@@ -17,10 +16,10 @@ import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { usePublicCard } from '@recallr/api';
+import { useRouteParam } from '@/hooks/useRouteParam';
 
 export default function PublicCardClient() {
-  const params = useParams();
-  const slug = params?.slug as string;
+  const slug = useRouteParam('slug');
   const { data: publicCard, isLoading } = usePublicCard(slug);
   const [downloaded, setDownloaded] = useState(false);
 

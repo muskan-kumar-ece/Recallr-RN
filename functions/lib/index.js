@@ -49,6 +49,7 @@ var import_auth = require("firebase-admin/auth");
 var import_storage = require("firebase-admin/storage");
 var import_https = require("firebase-functions/v2/https");
 var import_scheduler = require("firebase-functions/v2/scheduler");
+var import_v2 = require("firebase-functions/v2");
 var import_node_crypto2 = require("node:crypto");
 
 // ../packages/core/src/plans.ts
@@ -4388,6 +4389,10 @@ function paymentExpiry(plan, now) {
 }
 
 // src/index.ts
+(0, import_v2.setGlobalOptions)({
+  region: "us-central1",
+  invoker: "public"
+});
 (0, import_app.initializeApp)();
 var db = (0, import_firestore.getFirestore)();
 var auth = (0, import_auth.getAuth)();

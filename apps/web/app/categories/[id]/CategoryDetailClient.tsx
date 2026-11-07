@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
   IconPlus,
   IconPhone,
@@ -20,11 +20,11 @@ import { BottomSheet } from '@/components/ui/BottomSheet';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { useCategories, useContacts, useDeleteCategory } from '@recallr/api';
+import { useRouteParam } from '@/hooks/useRouteParam';
 
 export default function CategoryDetailClient() {
   const router = useRouter();
-  const params = useParams();
-  const categoryId = params?.id as string;
+  const categoryId = useRouteParam('id');
 
   const { data: dbCategories, isLoading: categoriesLoading } = useCategories();
   const { data: dbContacts, isLoading: contactsLoading } = useContacts({

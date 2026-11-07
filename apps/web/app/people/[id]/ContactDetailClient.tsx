@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { ScreenHeader } from '@/components/ui/ScreenHeader';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
@@ -14,11 +14,11 @@ import { ContactMoreMenuSheet } from '@/components/people/ContactMoreMenuSheet';
 import { Toast } from '@/components/ui/Toast';
 import { IconShare, IconDotsVertical, IconUserX } from '@tabler/icons-react';
 import { useContact, useDeleteContact, useRestoreContact } from '@recallr/api';
+import { useRouteParam } from '@/hooks/useRouteParam';
 
 export default function ContactDetailClient() {
   const router = useRouter();
-  const params = useParams();
-  const contactId = params?.id as string;
+  const contactId = useRouteParam('id');
 
   const { data: dbContact, isLoading } = useContact(contactId);
   const { mutate: deleteContactMutate } = useDeleteContact();

@@ -120,20 +120,38 @@ export default function EditCardPage() {
 
   const handleSave = async () => {
     try {
+      const trimmedWebsite = website.trim();
+      const normalizedWebsite = trimmedWebsite
+        ? (/^https?:\/\//i.test(trimmedWebsite) ? trimmedWebsite : `https://${trimmedWebsite}`)
+        : null;
+
+      const trimmedEmail = email.trim();
+      const normalizedEmail = trimmedEmail || null;
+
+      const normalizedSocials = socialLinks
+        .filter((s) => s.url && s.url.trim())
+        .map((s) => {
+          const url = s.url.trim();
+          return {
+            platform: s.platform,
+            url: /^https?:\/\//i.test(url) ? url : `https://${url}`,
+          };
+        });
+
       const payload = {
-        name,
-        role,
-        company,
-        tagline,
-        phone,
-        email,
-        website,
-        address,
-        about,
-        accent_color: activeColor,
+        name: name.trim() || null,
+        role: role.trim() || null,
+        company: company.trim() || null,
+        tagline: tagline.trim() || null,
+        phone: phone.trim() || null,
+        email: normalizedEmail,
+        website: normalizedWebsite,
+        address: address.trim() || null,
+        about: about.trim() || null,
+        accent_color: activeColor || '#E8641B',
         photo_path: photoPath,
         logo_path: logoPath,
-        socials: socialLinks.map((s) => ({ platform: s.platform, url: s.url })),
+        socials: normalizedSocials,
       };
 
       await updateCard({

@@ -4257,7 +4257,15 @@ var documentInputSchema = external_exports.object({
 });
 var cardSocialSchema = external_exports.object({
   platform: external_exports.string().min(1),
-  url: external_exports.string().url()
+  url: external_exports.preprocess((val) => {
+    if (typeof val === "string") {
+      const trimmed = val.trim();
+      if (!trimmed) return trimmed;
+      if (!/^https?:\/\//i.test(trimmed)) return `https://${trimmed}`;
+      return trimmed;
+    }
+    return val;
+  }, external_exports.string().url("Invalid social link URL"))
 });
 var cardVisibilitySchema = external_exports.object({
   phone: external_exports.boolean().default(true),
@@ -4267,14 +4275,33 @@ var cardVisibilitySchema = external_exports.object({
 });
 var digitalCardInputSchema = external_exports.object({
   label: external_exports.string().min(1).max(50).default("Business"),
-  slug: external_exports.string().min(3).max(50).regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
+  slug: external_exports.preprocess((val) => {
+    if (typeof val === "string") {
+      return val.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "").slice(0, 50);
+    }
+    return val;
+  }, external_exports.string().min(3).max(50).regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens")),
   name: external_exports.string().max(100).optional().nullable(),
   role: external_exports.string().max(100).optional().nullable(),
   company: external_exports.string().max(100).optional().nullable(),
   tagline: external_exports.string().max(150).optional().nullable(),
   phone: external_exports.string().max(30).optional().nullable(),
-  email: external_exports.string().email().optional().nullable().or(external_exports.literal("")),
-  website: external_exports.string().url().optional().nullable().or(external_exports.literal("")),
+  email: external_exports.preprocess((val) => {
+    if (typeof val === "string") {
+      const trimmed = val.trim();
+      return trimmed || null;
+    }
+    return val;
+  }, external_exports.string().email("Invalid email address").optional().nullable()),
+  website: external_exports.preprocess((val) => {
+    if (typeof val === "string") {
+      const trimmed = val.trim();
+      if (!trimmed) return null;
+      if (!/^https?:\/\//i.test(trimmed)) return `https://${trimmed}`;
+      return trimmed;
+    }
+    return val;
+  }, external_exports.string().url("Invalid website URL").optional().nullable()),
   address: external_exports.string().max(250).optional().nullable(),
   about: external_exports.string().max(1e3).optional().nullable(),
   accent_color: external_exports.string().regex(/^#[0-9A-Fa-f]{6}$/).default("#E8641B"),
@@ -4336,9 +4363,25 @@ var firebaseScanCardOutputSchema = external_exports.object({
   role: external_exports.string().max(200).nullable().default(null),
   company: external_exports.string().max(200).nullable().default(null),
   phone: external_exports.string().max(80).nullable().default(null),
-  email: external_exports.string().max(254).nullable().default(null),
+  email: external_exports.preprocess((val) => {
+    if (typeof val === "string") {
+      const trimmed = val.trim();
+      if (!trimmed) return null;
+      const isValid2 = external_exports.string().email().safeParse(trimmed).success;
+      return isValid2 ? trimmed : null;
+    }
+    return null;
+  }, external_exports.string().email().nullable().default(null)),
   address: external_exports.string().max(500).nullable().default(null),
-  website: external_exports.string().max(500).nullable().default(null),
+  website: external_exports.preprocess((val) => {
+    if (typeof val === "string") {
+      const trimmed = val.trim();
+      if (!trimmed) return null;
+      const url = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+      return external_exports.string().url().safeParse(url).success ? url : null;
+    }
+    return null;
+  }, external_exports.string().url().nullable().default(null)),
   tags: external_exports.array(external_exports.string().max(80)).max(20).default([]),
   confidence: external_exports.record(external_exports.string(), external_exports.number().min(0).max(1))
 });
@@ -4505,7 +4548,10 @@ var saveDigitalCard = (0, import_https.onCall)(async (request) => {
   const userId = request.auth.uid;
   const cardId = typeof request.data?.id === "string" && /^[A-Za-z0-9_-]{1,128}$/.test(request.data.id) ? request.data.id : null;
   const parsedInput = digitalCardInputSchema.partial().safeParse(request.data?.input);
-  if (!parsedInput.success) throw new import_https.HttpsError("invalid-argument", "Check the business card details and try again.");
+  if (!parsedInput.success) {
+    console.error("saveDigitalCard partial input validation failed:", parsedInput.error.format());
+    throw new import_https.HttpsError("invalid-argument", "Check the business card details and try again.");
+  }
   const cardRef = cardId ? db.collection("cards").doc(cardId) : db.collection("cards").doc();
   const now = (/* @__PURE__ */ new Date()).toISOString();
   const cardsQuery = db.collection("cards").where("user_id", "==", userId);
@@ -4529,7 +4575,8 @@ var saveDigitalCard = (0, import_https.onCall)(async (request) => {
       throw new import_https.HttpsError("permission-denied", "Card images must use your own card storage path.");
     }
   }
-  const slug = parsedInput.data.slug || String(current?.slug || `card-${userId.slice(0, 6)}-${cardRef.id.slice(0, 8)}`);
+  const rawSlug = parsedInput.data.slug || String(current?.slug || `card-${userId.slice(0, 6)}-${cardRef.id.slice(0, 8)}`);
+  const slug = rawSlug.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "").slice(0, 50) || `card-${cardRef.id.slice(0, 8).toLowerCase()}`;
   const sameSlugSnapshot = await db.collection("cards").where("slug", "==", slug).get();
   if (sameSlugSnapshot.docs.some((item) => item.id !== cardRef.id)) {
     throw new import_https.HttpsError("already-exists", "That card link is already in use. Choose another link.");
@@ -4544,7 +4591,10 @@ var saveDigitalCard = (0, import_https.onCall)(async (request) => {
       slug,
       label: parsedInput.data.label || "Business"
     });
-    if (!completeInput.success) throw new import_https.HttpsError("invalid-argument", "Check the business card details and try again.");
+    if (!completeInput.success) {
+      console.error("saveDigitalCard complete input validation failed:", completeInput.error.format());
+      throw new import_https.HttpsError("invalid-argument", "Check the business card details and try again.");
+    }
     const entitlement = entitlementSnapshot?.data();
     const expiry = entitlement?.expires_at ? new Date(entitlement.expires_at).getTime() : Number.POSITIVE_INFINITY;
     const isPro = entitlement?.plan === "pro" && expiry > Date.now();
@@ -5119,7 +5169,10 @@ var aiChat = (0, import_https.onCall)({ secrets: [geminiApiKey] }, async (reques
   if (!request.auth) throw new import_https.HttpsError("unauthenticated", "User must be signed in.");
   const parsedInput = firebaseAIChatInputSchema.safeParse(request.data);
   if (!parsedInput.success) {
-    console.error("aiChat validation error:", parsedInput.error.format(), "received:", JSON.stringify(request.data));
+    console.error("aiChat validation error:", parsedInput.error.format(), {
+      messageLength: typeof request.data?.message === "string" ? request.data.message.length : 0,
+      hasConversationId: Boolean(request.data?.conversationId)
+    });
     throw new import_https.HttpsError("invalid-argument", "Enter a message up to 2,000 characters.");
   }
   const { message } = parsedInput.data;

@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { firebaseAIActionProposalSchema, firebaseAIChatInputSchema, firebaseScanCardOutputSchema, userSettingsInputSchema } from './schemas';
+import {
+  digitalCardInputSchema,
+  firebaseAIActionProposalSchema,
+  firebaseAIChatInputSchema,
+  firebaseScanCardOutputSchema,
+  userSettingsInputSchema,
+} from './schemas';
 
 describe('user settings schema', () => {
   it('accepts each documented accent theme', () => {
@@ -18,6 +24,37 @@ describe('scan card result schema', () => {
     const result = firebaseScanCardOutputSchema.parse({ name: 'Asha Rao', confidence: { name: 0.72 } });
     expect(result.name).toBe('Asha Rao');
     expect(result.confidence.name).toBe(0.72);
+  });
+
+  it('validates emails during scan and nullifies invalid email strings', () => {
+    const valid = firebaseScanCardOutputSchema.parse({ email: 'asha@example.com', confidence: {} });
+    expect(valid.email).toBe('asha@example.com');
+
+    const invalid = firebaseScanCardOutputSchema.parse({ email: 'invalid-email-text', confidence: {} });
+    expect(invalid.email).toBeNull();
+  });
+});
+
+describe('digital card input schema', () => {
+  it('normalizes slug to lowercase alphanumeric with hyphens', () => {
+    const parsed = digitalCardInputSchema.parse({ slug: 'My Card 2026' });
+    expect(parsed.slug).toBe('my-card-2026');
+  });
+
+  it('auto-prefixes website and social urls with https', () => {
+    const parsed = digitalCardInputSchema.parse({
+      slug: 'my-card',
+      website: 'example.com',
+      socials: [{ platform: 'x', url: 'x.com/profile' }],
+    });
+    expect(parsed.website).toBe('https://example.com');
+    expect(parsed.socials?.[0]?.url).toBe('https://x.com/profile');
+  });
+
+  it('allows empty email and website as null', () => {
+    const parsed = digitalCardInputSchema.parse({ slug: 'my-card', email: '', website: '' });
+    expect(parsed.email).toBeNull();
+    expect(parsed.website).toBeNull();
   });
 });
 

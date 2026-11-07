@@ -153,7 +153,10 @@ export const saveDigitalCard = onCall(async (request) => {
     ? request.data.id
     : null;
   const parsedInput = digitalCardInputSchema.partial().safeParse(request.data?.input);
-  if (!parsedInput.success) throw new HttpsError('invalid-argument', 'Check the business card details and try again.');
+  if (!parsedInput.success) {
+    console.error('saveDigitalCard partial input validation failed:', parsedInput.error.format());
+    throw new HttpsError('invalid-argument', 'Check the business card details and try again.');
+  }
 
   const cardRef = cardId ? db.collection('cards').doc(cardId) : db.collection('cards').doc();
   const now = new Date().toISOString();
@@ -180,7 +183,13 @@ export const saveDigitalCard = onCall(async (request) => {
     }
   }
 
-  const slug = parsedInput.data.slug || String(current?.slug || `card-${userId.slice(0, 6)}-${cardRef.id.slice(0, 8)}`);
+  const rawSlug = parsedInput.data.slug || String(current?.slug || `card-${userId.slice(0, 6)}-${cardRef.id.slice(0, 8)}`);
+  const slug = rawSlug
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 50) || `card-${cardRef.id.slice(0, 8).toLowerCase()}`;
   const sameSlugSnapshot = await db.collection('cards').where('slug', '==', slug).get();
   if (sameSlugSnapshot.docs.some((item) => item.id !== cardRef.id)) {
     throw new HttpsError('already-exists', 'That card link is already in use. Choose another link.');
@@ -196,7 +205,10 @@ export const saveDigitalCard = onCall(async (request) => {
       slug,
       label: parsedInput.data.label || 'Business',
     });
-    if (!completeInput.success) throw new HttpsError('invalid-argument', 'Check the business card details and try again.');
+    if (!completeInput.success) {
+      console.error('saveDigitalCard complete input validation failed:', completeInput.error.format());
+      throw new HttpsError('invalid-argument', 'Check the business card details and try again.');
+    }
     const entitlement = entitlementSnapshot?.data();
     const expiry = entitlement?.expires_at ? new Date(entitlement.expires_at).getTime() : Number.POSITIVE_INFINITY;
     const isPro = entitlement?.plan === 'pro' && expiry > Date.now();
@@ -828,7 +840,10 @@ export const aiChat = onCall({ secrets: [geminiApiKey] }, async (request) => {
   if (!request.auth) throw new HttpsError('unauthenticated', 'User must be signed in.');
   const parsedInput = firebaseAIChatInputSchema.safeParse(request.data);
   if (!parsedInput.success) {
-    console.error('aiChat validation error:', parsedInput.error.format(), 'received:', JSON.stringify(request.data));
+    console.error('aiChat validation error:', parsedInput.error.format(), {
+      messageLength: typeof request.data?.message === 'string' ? request.data.message.length : 0,
+      hasConversationId: Boolean(request.data?.conversationId),
+    });
     throw new HttpsError('invalid-argument', 'Enter a message up to 2,000 characters.');
   }
   const { message } = parsedInput.data;

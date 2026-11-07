@@ -27,6 +27,19 @@ service cloud.firestore {
         && newData.get('userId', null) == oldData.get('userId', null);
     }
 
+    function isValidContactUpdate(oldData, newData) {
+      return unchangedOwner(oldData, newData)
+        && ('name' in newData && newData.name is string && newData.name.size() >= 1 && newData.name.size() <= 100)
+        && (!('role' in newData) || newData.role == null || (newData.role is string && newData.role.size() <= 100))
+        && (!('company' in newData) || newData.company == null || (newData.company is string && newData.company.size() <= 100))
+        && (!('phone' in newData) || newData.phone == null || (newData.phone is string && newData.phone.size() <= 30))
+        && (!('email' in newData) || newData.email == null || (newData.email is string && newData.email.size() <= 254))
+        && (!('address' in newData) || newData.address == null || (newData.address is string && newData.address.size() <= 250))
+        && (!('tags' in newData) || newData.tags is list)
+        && (!('category_ids' in newData) || newData.category_ids is list)
+        && (!('id' in oldData) || !('id' in newData) || newData.id == oldData.id);
+    }
+
     // Profiles and Settings
     match /profiles/{userId} {
       allow read, write: if isOwner(userId);
@@ -64,7 +77,7 @@ service cloud.firestore {
       allow read: if isAuthenticated() && docBelongsToUser(resource.data);
       // Contact creation passes through the quota-enforcing createContact callable.
       allow create: if false;
-      allow update: if unchangedOwner(resource.data, request.resource.data);
+      allow update: if isValidContactUpdate(resource.data, request.resource.data);
       allow delete: if isAuthenticated() && docBelongsToUser(resource.data);
     }
 

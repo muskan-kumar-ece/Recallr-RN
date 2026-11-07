@@ -56,7 +56,15 @@ export type DocumentInput = z.infer<typeof documentInputSchema>;
 
 export const cardSocialSchema = z.object({
   platform: z.string().min(1),
-  url: z.string().url(),
+  url: z.preprocess((val) => {
+    if (typeof val === 'string') {
+      const trimmed = val.trim();
+      if (!trimmed) return trimmed;
+      if (!/^https?:\/\//i.test(trimmed)) return `https://${trimmed}`;
+      return trimmed;
+    }
+    return val;
+  }, z.string().url('Invalid social link URL')),
 });
 
 export const cardVisibilitySchema = z.object({
@@ -68,14 +76,33 @@ export const cardVisibilitySchema = z.object({
 
 export const digitalCardInputSchema = z.object({
   label: z.string().min(1).max(50).default('Business'),
-  slug: z.string().min(3).max(50).regex(/^[a-z0-9-]+$/, 'Slug must be lowercase alphanumeric with hyphens'),
+  slug: z.preprocess((val) => {
+    if (typeof val === 'string') {
+      return val.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '').slice(0, 50);
+    }
+    return val;
+  }, z.string().min(3).max(50).regex(/^[a-z0-9-]+$/, 'Slug must be lowercase alphanumeric with hyphens')),
   name: z.string().max(100).optional().nullable(),
   role: z.string().max(100).optional().nullable(),
   company: z.string().max(100).optional().nullable(),
   tagline: z.string().max(150).optional().nullable(),
   phone: z.string().max(30).optional().nullable(),
-  email: z.string().email().optional().nullable().or(z.literal('')),
-  website: z.string().url().optional().nullable().or(z.literal('')),
+  email: z.preprocess((val) => {
+    if (typeof val === 'string') {
+      const trimmed = val.trim();
+      return trimmed || null;
+    }
+    return val;
+  }, z.string().email('Invalid email address').optional().nullable()),
+  website: z.preprocess((val) => {
+    if (typeof val === 'string') {
+      const trimmed = val.trim();
+      if (!trimmed) return null;
+      if (!/^https?:\/\//i.test(trimmed)) return `https://${trimmed}`;
+      return trimmed;
+    }
+    return val;
+  }, z.string().url('Invalid website URL').optional().nullable()),
   address: z.string().max(250).optional().nullable(),
   about: z.string().max(1000).optional().nullable(),
   accent_color: z.string().regex(/^#[0-9A-Fa-f]{6}$/).default('#E8641B'),
@@ -152,9 +179,25 @@ export const firebaseScanCardOutputSchema = z.object({
   role: z.string().max(200).nullable().default(null),
   company: z.string().max(200).nullable().default(null),
   phone: z.string().max(80).nullable().default(null),
-  email: z.string().max(254).nullable().default(null),
+  email: z.preprocess((val) => {
+    if (typeof val === 'string') {
+      const trimmed = val.trim();
+      if (!trimmed) return null;
+      const isValid = z.string().email().safeParse(trimmed).success;
+      return isValid ? trimmed : null;
+    }
+    return null;
+  }, z.string().email().nullable().default(null)),
   address: z.string().max(500).nullable().default(null),
-  website: z.string().max(500).nullable().default(null),
+  website: z.preprocess((val) => {
+    if (typeof val === 'string') {
+      const trimmed = val.trim();
+      if (!trimmed) return null;
+      const url = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+      return z.string().url().safeParse(url).success ? url : null;
+    }
+    return null;
+  }, z.string().url().nullable().default(null)),
   tags: z.array(z.string().max(80)).max(20).default([]),
   confidence: z.record(z.string(), z.number().min(0).max(1)),
 });

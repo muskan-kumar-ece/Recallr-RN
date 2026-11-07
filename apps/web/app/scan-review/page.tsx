@@ -92,6 +92,13 @@ export default function ScanReviewPage() {
       return;
     }
 
+    const trimmedEmail = email.trim();
+    if (trimmedEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail)) {
+      setToastMessage('Please enter a valid email address or leave it blank');
+      setToastVisible(true);
+      return;
+    }
+
     try {
       const newContact = await createContactAsync({
         input: {
@@ -99,7 +106,7 @@ export default function ScanReviewPage() {
           role: role.trim() || null,
           company: company.trim() || null,
           phone: phone.trim() || null,
-          email: email.trim() || null,
+          email: trimmedEmail || null,
           address: address.trim() || null,
           met_where: metWhere.trim() || null,
           category_ids: selectedCatId ? [selectedCatId] : [],

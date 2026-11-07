@@ -30,7 +30,7 @@ All data is partitioned by authenticated user identifier (`request.auth.uid`), m
 ## Security Rules (`firestore.rules`)
 - **Ownership:** User collections require the authenticated UID to match the stored `user_id` or legacy `userId` on reads, updates, and deletes. Supplied owner fields must match the authenticated UID at creation; updates preserve every owner field.
 - **Entitlements and usage:** Clients can create only their initial Free entitlement. Paid entitlements and all usage-counter writes are server-only.
-- **Contact creation:** The `createContact` and `createContactsBatch` callables enforce the shared Free active-contact limit; direct client creates are denied.
+- **Contact creation and updates:** The `createContact` and `createContactsBatch` callables enforce the shared Free active-contact limit; direct client creates are denied. Client updates are validated via `isValidContactUpdate` which enforces ownership immutability (`unchangedOwner`), valid string `name` (1-100 characters), length bounds on optional string fields (`role` <= 100, `company` <= 100, `phone` <= 30, `email` <= 254, `address` <= 250), list types for `tags` and `category_ids`, and document ID preservation if present.
 - **AI conversations and pending actions:** Client reads and writes are denied; authenticated Cloud Functions enforce ownership and perform all chat/action operations.
 - **Cards:** Card documents are owner-readable only. Client writes are denied; `saveDigitalCard` enforces ownership, unique slugs, and Free/Pro card limits. Public card requests go through `getPublicCard`, which returns only active-card fields and applies the card's visibility settings.
 - **Payment orders:** `payment_orders` is server-only.

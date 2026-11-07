@@ -134,11 +134,20 @@ function AskRecallrContent() {
       };
 
       setMessages((prev) => [...prev, assistantMessage]);
-    } catch {
+    } catch (err: unknown) {
+      const rawMessage = err instanceof Error ? err.message : '';
+      const isLimit = rawMessage.includes('limit') || (err as { code?: string })?.code === 'resource-exhausted';
+      if (isLimit) {
+        setLimitOpen(true);
+      }
+      const text = rawMessage
+        ? rawMessage.replace(/^FirebaseError:\s*/, '')
+        : 'I could not process that request right now. Please check your network connection.';
+
       const errorMessage: ChatMessage = {
         id: `err_${Date.now()}`,
         role: 'assistant',
-        text: 'I could not process that request right now. Please check your network connection.',
+        text,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
       setMessages((prev) => [...prev, errorMessage]);

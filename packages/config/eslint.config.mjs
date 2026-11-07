@@ -11,6 +11,19 @@ export default tseslint.config(
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'react-native',
+              importNames: ['TouchableOpacity'],
+              message:
+                'Raw TouchableOpacity is banned. Use PressableScale, Button, Card, Chip, or ListRow from components/ui.',
+            },
+          ],
+        },
+      ],
     },
   }
 );

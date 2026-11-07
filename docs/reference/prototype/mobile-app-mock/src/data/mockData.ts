@@ -213,7 +213,7 @@ export const INITIAL_NOTES: Note[] = [
     contact_id: 'con-1',
     contact_name: 'Aarav Sharma',
     title: 'Check in on mobile SDK architecture',
-    content: 'Discuss SQLite offline queue with Supabase sync.',
+    content: 'Discuss SQLite offline queue with Firebase sync.',
     remind_at: 'Tomorrow, 11:00 AM',
     repeat: 'weekly',
     done: false,

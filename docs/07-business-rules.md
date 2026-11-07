@@ -1,6 +1,6 @@
 # 07. Business rules
 
-Keep all numbers in ONE config file per side: `src/config/plans.ts` (app) and `supabase/functions/_shared/plans.ts` (server), with a test that checks they are equal. Values marked TBC must be confirmed by the owner before launch.
+Keep all plan limits in `packages/core/src/plans.ts`. The apps and Firebase Cloud Functions import the same configuration, so values cannot drift. Values marked TBC must be confirmed by the owner before launch.
 
 ## Plans
 | | Free | Pro |
@@ -21,10 +21,10 @@ Suggested prices (set in the store consoles, TBC): Monthly Rs 149, Yearly Rs 1,1
 - Counts: contacts = rows with `deleted_at is null`. Scan = successful `scan-card`. AI question = successful `ai-chat`, `summarize-contact`, or `suggest-categories` call. Daily period uses the user's timezone.
 - When blocked show the limit sheet (`03-screens/subscription.md`). Always offer a free alternative when possible.
 - If a Pro user downgrades: nothing is deleted. Over-limit users can view and edit but cannot add new contacts until under the limit. Extra cards become read only except the first.
-- Limits are checked on the server. The app also checks to show the sheet early.
+- Limits are checked transactionally in Firebase Cloud Functions. Contact and digital card creates, AI-created contacts, scans, AI calls, and Storage uploads enforce their plan limits server-side. Firestore Security Rules deny direct contact/card creation, direct Storage writes, client usage-counter writes, and client paid-entitlement writes. The app may also check early to show the limit sheet.
 
 ## Entitlements
-RevenueCat entitlement id: `pro`. Products: `recallr_pro_monthly`, `recallr_pro_yearly` (names TBC). The `revenuecat-webhook` Edge Function writes `entitlements`. The app reads `entitlements` and also uses RevenueCat customer info for instant UI after purchase; the server table is the truth for limits.
+The `entitlements/{userId}` Firestore document is the server source of truth. Clients can create only a Free entitlement; Firebase Cloud Functions grant paid entitlements after payment verification. The client cannot write or extend a Pro entitlement.
 
 ## Duplicate detection (on save, scan, import)
 A match is another non-deleted contact of the same user where any is true:
@@ -45,11 +45,12 @@ A contact needs follow-up when ALL are true: not deleted; `coalesce(last_contact
 
 ## Local notifications
 - Use `expo-notifications` local scheduling. Keep a local map note id to notification id.
-- Reconcile on app start and when the app comes to the foreground: cancel stale ones and schedule the soonest 60 upcoming reminders (iOS allows about 64 pending local notifications).
+- Mobile reconciles local reminder notifications on app start and foreground: cancel stale ones and schedule the soonest 60 upcoming reminders (iOS allows about 64 pending local notifications). Native mobile devices register FCM/APNs tokens through an authenticated Cloud Function; a server scheduler dispatches due reminders and respects each user's timezone and quiet hours. Firebase Cloud Messaging/APNs credentials and Cloud Scheduler must be enabled in the Firebase project before deployment.
 - Notification actions: Done, Snooze (default duration), Open.
+- Remote reminder notification taps open the linked contact when one is attached, otherwise the Notes tab. Done and Snooze controls are currently available on local notifications.
 - Quiet hours: reminders that fall inside quiet hours are delivered at the end of quiet hours. Follow-up nudges and the daily brief never fire in quiet hours.
 - Daily brief: schedule the next 7 days with content computed at scheduling time; refresh whenever the app opens.
-- Android needs a notification channel ("Reminders") and the notification permission on Android 13 and later. Ask for permission the first time the user turns on a reminder.
+- Android needs a notification channel ("Reminders") and the notification permission on Android 13 and later. Ask for permission the first time the user turns on a reminder. The app registers its native device token when reminders are enabled and disables that registration when reminders are turned off.
 
 ## Undo and confirmations
 Undo toast (no popup) for: delete contact, note, category, document; complete or snooze reminder; merge (10 s). Confirm sheets ARE required for: delete account, regenerate card link, delete card, AI delete, AI actions touching more than one contact, discard unsaved changes.

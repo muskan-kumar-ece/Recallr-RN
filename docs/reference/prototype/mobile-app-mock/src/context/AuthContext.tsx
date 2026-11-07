@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { Profile } from '../types/database';
 
 export interface User {
@@ -84,74 +83,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const loginWithPhone = async (phone: string) => {
-    try {
-      if (isSupabaseConfigured) {
-        const { error } = await supabase.auth.signInWithOtp({ phone });
-        if (error) throw error;
-        return { success: true };
-      } else {
-        // Demo mode fallback
-        return { success: true, message: 'OTP sent (Demo code: 123456)' };
-      }
-    } catch (err: any) {
-      return { success: false, message: err.message || 'Failed to send OTP' };
-    }
+    void phone;
+    return { success: true, message: 'Prototype demo code: 123456' };
   };
 
   const verifyPhoneOtp = async (phone: string, otp: string) => {
     try {
-      if (isSupabaseConfigured) {
-        const { data, error } = await supabase.auth.verifyOtp({
-          phone,
-          token: otp,
-          type: 'sms',
-        });
-        if (error) throw error;
-        if (data.user) {
-          const newUser: User = {
-            id: data.user.id,
-            phone: data.user.phone,
-            email: data.user.email,
-            name: (data.user.user_metadata?.full_name as string) || 'Recallr User',
-          };
-          setUser(newUser);
-          await AsyncStorage.setItem('@recallr_user', JSON.stringify(newUser));
-        }
-        return { success: true };
-      } else {
-        // Demo mode verification
-        const demoUser: User = {
-          id: DEMO_PROFILE.id,
-          phone,
-          name: 'Muskan Kapoor',
-        };
-        setUser(demoUser);
-        setProfile(DEMO_PROFILE);
-        await AsyncStorage.setItem('@recallr_user', JSON.stringify(demoUser));
-        await AsyncStorage.setItem('@recallr_profile', JSON.stringify(DEMO_PROFILE));
-        return { success: true };
-      }
-    } catch (err: any) {
-      return { success: false, message: err.message || 'Invalid OTP code' };
-    }
+    if (otp !== '123456') return { success: false, message: 'Invalid demo code' };
+    const demoUser: User = { id: DEMO_PROFILE.id, phone, name: DEMO_PROFILE.name };
+    setUser(demoUser);
+    setProfile(DEMO_PROFILE);
+    await AsyncStorage.setItem('@recallr_user', JSON.stringify(demoUser));
+    await AsyncStorage.setItem('@recallr_profile', JSON.stringify(DEMO_PROFILE));
+    return { success: true };
   };
 
   const loginWithGoogle = async () => {
-    try {
-      if (isSupabaseConfigured) {
-        const { error } = await supabase.auth.signInWithOAuth({
-          provider: 'google',
-        });
-        if (error) throw error;
-        return { success: true };
-      } else {
-        // In demo mode, sign in with demo profile
-        await loginDemoUser();
-        return { success: true };
-      }
-    } catch (err: any) {
-      return { success: false, message: err.message || 'Google Sign In failed' };
-    }
+    await loginDemoUser();
+    return { success: true };
   };
 
   const loginDemoUser = async () => {
@@ -179,9 +128,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signOut = async () => {
-    if (isSupabaseConfigured) {
-      await supabase.auth.signOut();
-    }
     setUser(null);
     setProfile(null);
     setIsOnboarded(false);

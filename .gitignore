@@ -5,6 +5,11 @@ node_modules/
 # Next.js
 .next/
 out/
+apps/web/out/
+apps/mobile/dist/
+
+# MCP & Temporary
+.playwright-mcp/
 
 # Turborepo
 .turbo/
@@ -30,6 +35,10 @@ expo-env.d.ts
 # Environment files
 .env
 .env*.local
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
 !.env.example
 
 # Debug and logs

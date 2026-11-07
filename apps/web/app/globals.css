@@ -3,8 +3,42 @@
 @tailwind utilities;
 
 :root {
-  --background: #F8F7F4;
+  --background: #F2F0EB;
   --foreground: #2B2B2B;
+  --accent-rgb: 232 100 27;
+  --accent-tint-rgb: 253 235 221;
+  --accent-tint-soft-rgb: 255 249 244;
+  --accent-dark-rgb: 184 74 16;
+  --accent-pressed-rgb: 208 86 21;
+}
+
+:root[data-accent-theme='indigo'] {
+  --accent-rgb: 79 91 213;
+  --accent-tint-rgb: 230 232 251;
+  --accent-tint-soft-rgb: 247 247 255;
+  --accent-dark-rgb: 53 61 155;
+  --accent-pressed-rgb: 63 73 190;
+}
+:root[data-accent-theme='teal'] {
+  --accent-rgb: 29 158 117;
+  --accent-tint-rgb: 220 243 236;
+  --accent-tint-soft-rgb: 245 252 249;
+  --accent-dark-rgb: 19 112 82;
+  --accent-pressed-rgb: 23 134 99;
+}
+:root[data-accent-theme='pink'] {
+  --accent-rgb: 212 83 126;
+  --accent-tint-rgb: 250 229 237;
+  --accent-tint-soft-rgb: 255 247 250;
+  --accent-dark-rgb: 153 48 86;
+  --accent-pressed-rgb: 184 63 105;
+}
+:root[data-accent-theme='slate'] {
+  --accent-rgb: 68 68 65;
+  --accent-tint-rgb: 234 234 232;
+  --accent-tint-soft-rgb: 248 248 247;
+  --accent-dark-rgb: 48 48 46;
+  --accent-pressed-rgb: 56 56 53;
 }
 
 body {
@@ -12,4 +46,14 @@ body {
   background: var(--background);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

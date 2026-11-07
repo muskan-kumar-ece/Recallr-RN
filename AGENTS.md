@@ -1,6 +1,6 @@
 # AGENTS.md: Rules for the AI coding agent
 
-Project: **Recallr**, a cross-platform personal CRM and network management application with identical UI, look, and behavior across iOS, Android (`apps/mobile`), and Web (`apps/web`), powered by a shared Supabase backend (`supabase/`), unified design tokens (`packages/tokens`), pure TypeScript domain rules (`packages/core`), and a universal typed data layer (`packages/api`).
+Project: **Recallr**, a cross-platform personal CRM and network management application with identical UI, look, and behavior across iOS, Android (`apps/mobile`), and Web (`apps/web`), powered by Firebase Auth, Cloud Firestore, Cloud Storage, and Cloud Functions (`firebase.json`, `firestore.rules`, `storage.rules`, `functions/`), unified design tokens (`packages/tokens`), pure TypeScript domain rules (`packages/core`), and a universal typed data layer (`packages/api`).
 
 ## Read first (in this order)
 1. `docs/01-product.md` (product scope, promises, glossary)
@@ -24,17 +24,17 @@ Project: **Recallr**, a cross-platform personal CRM and network management appli
    - `packages/core` imports NOTHING UI (no React, no React Native, no DOM).
    - `packages/tokens` contains no runtime dependencies.
 9. **Destructive actions use an undo toast, not a confirm popup.** Exceptions are listed in `docs/07-business-rules.md` (delete account, AI delete and bulk actions, regenerate card link).
-10. **The AI provider key never goes in the app.** All AI calls go through Supabase Edge Functions.
-11. **Enforce limits and access on the server** (row level security and Edge Functions), not only in the app.
+10. **The AI provider key never goes in the app.** All AI calls go through Firebase Cloud Functions; provider keys are configured as server secrets.
+11. **Enforce limits and access on the server** (Firestore Security Rules and Firebase Cloud Functions), not only in the app.
 12. **Secrets live in environment variables.** Never commit `.env`. Never log secrets or personal data.
-13. **TypeScript strict. No `any`.** Validate forms and Edge Function inputs with Zod from `packages/core`.
-14. **Database changes go in a new migration file** in `supabase/migrations/`. Never edit an applied migration. Update `docs/05-data-model.md` in the same change.
+13. **TypeScript strict. No `any`.** Validate forms and Cloud Function inputs with Zod from `packages/core`.
+14. **Firestore data and security changes** must update `firestore.rules` or the relevant Cloud Function, then update `docs/05-data-model.md` in the same change. Do not add SQL migrations for Firebase data.
 15. **If behavior changes, update the doc in the same change.** Docs and code must never disagree.
 16. **Copy text exactly as written in the screen docs.** Do not rewrite UI text.
 
 ## Parity verification
 - Each app has a hidden `/dev/components` page showing every component and state. Compare mobile and web screenshots of it side by side to check parity.
-- Free and Pro limits behave identically on both platforms and are enforced by Supabase RLS and Edge Functions.
+- Free and Pro limits behave identically on both platforms and are enforced by Firestore Security Rules and Firebase Cloud Functions.
 
 ## Workflow for every task
 1. Restate the task and list the docs you used.

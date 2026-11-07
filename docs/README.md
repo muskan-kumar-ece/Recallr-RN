@@ -6,9 +6,8 @@
 | 02-design-system.md | Colors, type, spacing, components |
 | 03-screens/ | One spec per screen (start with `00-index.md`) |
 | 04-flows.md | Step by step user flows |
-| 05-data-model.md | Tables, relations, security rules |
-| sql/0001_init.sql | The database migration (copy to `supabase/migrations/`) |
-| 06-ai-spec.md | AI tools, confirmation rules, Edge Functions |
+| 05-data-model.md | Firestore collections, security rules, and storage layout |
+| 06-ai-spec.md | AI tools, confirmation rules, Firebase Cloud Functions |
 | 07-business-rules.md | Plans, limits, duplicates, reminders, privacy |
 | 08-tech.md | Stack, libraries, folder structure, conventions |
 | 09-build-plan.md | Phases and checklists with "Done when" |

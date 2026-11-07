@@ -1,0 +1,15 @@
+{
+  "projects": {
+    "default": "recallr-72d38"
+  },
+  "targets": {
+    "recallr-72d38": {
+      "storage": {
+        "default": [
+          "recallr-72d38.firebasestorage.app"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}

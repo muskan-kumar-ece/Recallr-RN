@@ -1,6 +1,6 @@
 # 11. Monorepo architecture & workspace guide
 
-Recallr is structured as a TypeScript monorepo powered by **pnpm workspaces** and **Turborepo**. Both the mobile app (iOS & Android via Expo) and the web app (Next.js App Router) share the exact same design tokens, core business logic, validation schemas, API hooks, and Supabase backend.
+Recallr is structured as a TypeScript monorepo powered by **pnpm workspaces** and **Turborepo**. Both the mobile app (iOS & Android via Expo) and the web app (Next.js App Router) share the exact same design tokens, core business logic, validation schemas, API hooks, and Firebase backend.
 
 ---
 
@@ -14,9 +14,12 @@ recallr/
 ├── packages/
 │   ├── tokens/             # Design tokens (colors, typography, spacing, radius)
 │   ├── core/               # Pure TypeScript business rules, zod schemas, types, unit tests
-│   ├── api/                # Supabase client factory, typed queries, TanStack Query hooks
+│   ├── api/                # Firebase client factory, typed queries, TanStack Query hooks
 │   └── config/             # Shared ESLint, Prettier, and TypeScript configurations
-├── supabase/               # Backend: migrations, Edge Functions, seed, config
+├── functions/              # Firebase Cloud Functions
+├── firebase.json           # Firebase deployment configuration
+├── firestore.rules         # Firestore access rules
+├── storage.rules           # Cloud Storage access rules
 ├── docs/                   # Documentation and specifications (source of truth)
 ├── package.json            # Monorepo root workspace configuration
 ├── pnpm-workspace.yaml     # pnpm workspace definition
@@ -65,7 +68,7 @@ recallr/
 - **Dependencies:** **Zero UI dependencies.** (No React, no React Native, no DOM).
 - **Contents:**
   - **Types:** Contact, Category, Note, Reminder, Card, Entitlement, UserSettings, AI blocks.
-  - **Zod schemas:** Input validation for forms (contact, note, card, settings) and Edge Function payloads.
+  - **Zod schemas:** Input validation for forms (contact, note, card, settings) and Cloud Function payloads.
   - **Plans configuration (`plans.ts`):** Free and Pro quotas (50 contacts, 10 scans/mo, 5 AI questions/day, 1 card on Free; unlimited on Pro).
   - **Business rules:**
     - `phoneKey(phone)`: Normalization to last 10 digits (`\D` stripped).
@@ -73,15 +76,16 @@ recallr/
     - `isDuplicateMatch(candidate, existing)`: Duplicate detection matching algorithm.
     - `isFollowUpDue(contact, nudgeDays, now)`: "Needs follow-up" calculation.
     - `advanceReminder(remindAt, repeat, now)`: Recurrence calculation for daily, weekly, and monthly repeating reminders (clamped to month ends).
+    - `isInQuietHours(now, start, end, timezone)`: Shared timezone-aware quiet-hour check.
     - `snoozeReminder(remindAt, snoozeMinutes)`: Snooze calculation.
     - `vCardBuilder`: Standard `.vcf` vCard generator for sharing and public card download.
   - **Unit tests:** Comprehensive Vitest tests verifying all business rules and edge cases.
 
 ### `packages/api` (Shared client & data hooks)
-- **Role:** Universal typed data layer for Supabase and TanStack Query.
+- **Role:** Universal typed data layer for Firebase and TanStack Query.
 - **Contents:**
-  - Supabase client factory: Configures `@supabase/supabase-js` with platform-specific auth storage (`expo-secure-store` / AsyncStorage on mobile, cookies / localStorage on web).
-  - Database TypeScript types generated directly from `supabase/migrations/0001_init.sql`.
+  - Firebase clients for Auth, Firestore, Cloud Storage, and callable Cloud Functions.
+  - Shared domain types and Zod validation from `@recallr/core`.
   - Typed queries & mutations: Contacts, categories, notes, reminders, cards, settings, AI chats.
   - Shared TanStack Query hooks (`useContacts`, `useContact`, `useNotes`, `useCategories`, `useMyCard`, `useAIChat`, etc.).
   - Offline cache persistence and optimistic mutation helpers.
@@ -93,12 +97,12 @@ recallr/
   - ESLint configuration.
   - Prettier configuration.
 
-### `supabase` (Backend workspace)
-- **Role:** Backend database, migrations, security, and serverless compute.
+### `functions` and Firebase configuration (Backend)
+- **Role:** Backend database, authentication, storage, security, and serverless compute.
 - **Contents:**
-  - `supabase/migrations/`: SQL migration files (`0001_init.sql` etc.) with RLS policies and triggers.
-  - `supabase/functions/`: Deno Edge Functions (`ai-chat`, `ai-confirm`, `scan-card`, `summarize-contact`, `suggest-categories`, `delete-account`, `revenuecat-webhook`, `_shared/`).
-  - `supabase/seed.sql`: Local development test seed data.
+  - `firestore.rules`: Owner-based Firestore rules; paid entitlements and usage counters are server-managed.
+  - `storage.rules`: Private user files and owner-only card asset uploads.
+  - `functions/src/`: Node.js Cloud Functions for AI, card scanning, payments, public card projection, native auth exchange, and account deletion.
 
 ---
 
@@ -129,7 +133,7 @@ To maintain modularity and avoid circular dependencies, the monorepo strictly en
 2. **Packages must never import from apps:** No file in `packages/*` may ever import from `apps/mobile` or `apps/web`.
 3. **Core is pure TypeScript:** `packages/core` must not import any UI framework (React, React Native, Tailwind, HTML DOM) or network libraries. It only imports pure utilities (such as `zod` and `date-fns`).
 4. **Tokens are pure data:** `packages/tokens` contains no runtime dependencies.
-5. **Edge Functions share domain logic:** Edge Functions in `supabase/functions/` share business rules and plan limits with `packages/core`.
+5. **Cloud Functions share domain logic:** Firebase Cloud Functions import business rules and plan limits from `packages/core`.
 6. **No circular dependencies:** Package dependency hierarchy is strictly acyclic: `config` -> `tokens` -> `core` -> `api` -> `apps`.
 
 ---
@@ -148,7 +152,8 @@ Root commands execute across workspaces via Turborepo:
 | `pnpm typecheck` | Runs `tsc --noEmit` across all workspaces. |
 | `pnpm test` | Runs unit tests across all packages (Vitest for core, Jest for apps). |
 | `pnpm clean` | Cleans `.turbo`, `dist`, `.next`, and cache folders across the monorepo. |
-| `pnpm db:types` | Generates TypeScript database types into `packages/api`. |
+| `pnpm firebase:emulators` | Starts local Firebase emulators. |
+| `pnpm firebase:deploy` | Deploys configured Firebase services (release action). |
 
 ---
 
@@ -184,7 +189,7 @@ Root commands execute across workspaces via Turborepo:
 ### 1. Prerequisites
 - **Node.js:** v20.x or v22.x LTS
 - **pnpm:** v9.x or later (`npm install -g pnpm`)
-- **Supabase CLI:** (`npm install -g supabase` or brew/scoop)
+- **Firebase CLI:** (`npm install -g firebase-tools`)
 - **Expo CLI / EAS CLI:** (`npm install -g eas-cli`)
 
 ### 2. Initial setup
@@ -201,16 +206,10 @@ cp apps/mobile/.env.example apps/mobile/.env
 cp apps/web/.env.example apps/web/.env
 ```
 
-### 3. Local Supabase backend
+### 3. Local Firebase backend
 ```bash
-# Start local Supabase containers (Postgres, Auth, Storage, Edge Functions)
-supabase start
-
-# Apply database migration
-supabase db reset
-
-# Generate TypeScript types into packages/api
-pnpm db:types
+# Start local Auth, Firestore, Storage, and Functions emulators
+firebase emulators:start --only auth,firestore,storage,functions
 ```
 
 ### 4. Running applications

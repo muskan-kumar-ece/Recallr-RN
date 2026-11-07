@@ -7,8 +7,8 @@ Full screen camera (`expo-camera`). Permission is requested here, with a short e
 QR mode: same screen, frame is square, hint "Point at a Recallr QR". Accept only URLs of the form `https://{APP_DOMAIN}/c/{slug}`; others show "That is not a Recallr card".
 
 ## After capture
-1. Upload the image to private storage (`contact-files/{user_id}/cards/{uuid}.jpg`), compressed to max 1600 px.
-2. Call Edge Function `scan-card` (see AI spec). Show a "Reading card..." shimmer over the card image.
+1. Upload the image to private storage (`users/{user_id}/cards/{uuid}.jpg`), compressed to max 1600 px.
+2. Call Firebase Cloud Function `scanCard` (see AI spec). Show a "Reading card..." shimmer over the card image.
 3. On success open `scan-review`. A successful read counts as 1 scan. A failed read does not count.
 4. On failure: EmptyState "Couldn't read this card" with "Try again" and "Add manually" (pre-fills nothing).
 

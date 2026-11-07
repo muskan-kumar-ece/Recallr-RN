@@ -10,21 +10,28 @@
     "backgroundColor": "#F8F7F4",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "app.recallr.mobile"
+      "bundleIdentifier": "app.recallr.mobile",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#F8F7F4",
         "foregroundImage": "./assets/android-icon-foreground.png"
       },
-      "package": "app.recallr.mobile"
+      "package": "app.recallr.mobile",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-notifications",
+      ["expo-camera", { "cameraPermission": "Recallr uses your camera to scan business cards and Recallr QR codes." }],
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      "expo-sharing"
     ],
     "experiments": {
       "typedRoutes": true

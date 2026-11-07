@@ -119,7 +119,7 @@ export default function SettingsScreen() {
             />
             <ListRow
               title="Offline Sync & Storage"
-              subtitle="Supabase local cache active"
+              subtitle="Local prototype data active"
               avatarText="☁️"
               showDivider={false}
             />

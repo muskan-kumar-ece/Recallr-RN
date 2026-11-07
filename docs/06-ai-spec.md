@@ -2,30 +2,33 @@
 
 The AI has two jobs: **answer questions from the user's own data** and **propose changes that the user confirms**. It never uses outside knowledge about people and never writes data without a Confirm.
 
-The AI provider is configured by environment variables (`AI_PROVIDER_API_KEY`, `AI_MODEL`, see setup). Keep all provider calls inside `supabase/functions/_shared/ai.ts` so the provider can be changed in one place. The key lives only in Supabase secrets.
+The AI provider is configured with Firebase Functions secrets (`GEMINI_API_KEY`, `AI_PROVIDER_API_KEY`). Keep provider calls inside `functions/src/` and never ship provider keys in app bundles.
 
-## Edge Functions
-| Function | Input | Output | Counts toward |
+## Firebase Cloud Functions
+| Firebase Cloud Function | Input | Output | Counts toward |
 |---|---|---|---|
-| `ai-chat` | message, conversation_id?, context {contact_id?, category_id?} | assistant blocks (below) | 1 AI question |
-| `ai-confirm` | pending_action_id, decision ('confirm' or 'cancel') | result and created ids | nothing |
-| `scan-card` | image storage path | fields with confidence | 1 scan on success |
-| `summarize-contact` | contact_id | summary text (also saved on the contact) | 1 AI question |
-| `suggest-categories` | none (uses uncategorized contacts) | proposals [{contact_id, category}] | 1 AI question |
-| `delete-account` | none | ok | nothing |
+| `aiChat` | message, conversationId? | assistant blocks (below), stored conversation messages | 1 AI question on success |
+| `aiConfirm` | pendingActionId, decision ('confirm', 'cancel' or 'undo') | result | nothing; applies, cancels or reverses an owner-scoped pending proposal |
+| `scanCard` | owner-scoped `storagePath` | validated fields and confidence | 1 scan on success |
+| `summarizeContact` | contactId | summary text | 1 AI question |
+| `suggestCategories` | none (currently fixed suggestions) | categories | 1 AI question |
+| `deleteAccount` | none | ok | nothing |
+| `create-razorpay-order` | plan ('pro_monthly' or 'pro_yearly') | order details (orderId, amount, keyId) | nothing |
+| `verify-razorpay-payment` | order_id, payment_id, signature, plan | verification result, updates `entitlements` | nothing |
+| `razorpay-webhook` | Razorpay payment/order event | ok (updates `entitlements`) | nothing |
 | `revenuecat-webhook` | RevenueCat event | ok (updates `entitlements`) | nothing |
 
-All functions: verify the user's JWT, validate input with zod, check plan and usage limits (`docs/07-business-rules.md`), and return a machine readable error code when blocked (`limit_reached`, `not_found`, `invalid_input`, `ai_unavailable`).
+All callable functions verify Firebase Auth. User input is validated with Zod. AI and scan calls reserve usage transactionally in Firestore and refund the reservation on failure. Public card reads use `getPublicCard`, which returns only the enabled fields.
 
 ## ai-chat flow
 1. Authenticate, check the daily limit. If over: return `limit_reached`.
 2. Load the last 10 messages of the conversation and the user's timezone and current time.
 3. Call the model with the system prompt and the tools below. Run tool calls (max 5 rounds).
-4. Read tools run with the user's JWT (RLS applies). Write tools never write: they create an `ai_pending_actions` row and the response includes a confirm block.
+4. The function supplies owner-scoped contact context and, only when `ai_use_notes` is enabled, note context. Write function calls are validated with Zod, stored as an `ai_pending_actions` row, and returned as a confirm block before they can be applied.
 5. Save messages. Increment the counter only if the model call succeeded.
 
 ## Tools
-Read tools (execute immediately):
+The callable supports these read intents from the supplied owner context and proposes owner-scoped writes through validated function tools:
 - `search_contacts({query?, category?, tag?, met_where?, limit<=20})` -> list of {id, name, role, company, categories}
 - `get_contact({contact_id})` -> full contact, categories, last contacted
 - `list_categories()` -> categories with counts
@@ -40,7 +43,8 @@ Propose tools (create a pending action, return a confirm block):
 - `propose_set_reminder({contact_id?, title, remind_at (ISO with offset), repeat?})`
 - `propose_move_to_category({contact_ids[], category_name})`
 - `propose_delete({kind: 'contact'|'note'|'category', id})` (destructive: the confirm card uses a warning style and the button reads "Delete")
-One user message may create one pending action that bundles several steps (for example create category and add contact). Pending actions expire after 1 hour.
+- `propose_batch({actions[]})` for 2–10 related, non-delete actions from the supported create, update, move, note, and reminder tools. Delete proposals must be confirmed separately. A single confirmation applies the batch transactionally; undo reverses its effects for five minutes.
+One user message creates at most one pending action. Pending actions expire after 1 hour. Confirmation applies the validated action in a Firestore transaction; cancellation marks the proposal cancelled. Confirmed actions with reversible effects expose Undo for five minutes.
 
 ## Response blocks (JSON the app renders)
 ```
@@ -54,7 +58,7 @@ One user message may create one pending action that bundles several steps (for e
 ]}
 ```
 
-## System prompt (store in `supabase/functions/_shared/prompts.ts`)
+## System prompt (Firebase Cloud Functions)
 ```
 You are Recallr, an assistant inside a personal network app.
 Rules:
@@ -74,7 +78,7 @@ Input: storage path of the card image. Output: `{name, role, company, phones[], 
 ## Privacy and safety
 - `ai_use_notes = false`: do not read notes in any tool or summary.
 - Do not send documents or images (except the card image for scanning) to the model.
-- Never include other users' data. All reads go through RLS.
+- Never include other users' data. All reads verify Firebase ownership.
 - Log errors without personal data.
 
 ## Example conversation A (question)
@@ -86,4 +90,4 @@ User: "Create category Local Shop and add Mukesh, he runs a tea stall"
 Assistant: question "What is Mukesh's phone number?" with Skip and Pick from contacts.
 User: "98765 11122"
 Assistant: confirm card (Category: Local Shop [New], Name: Mukesh, Role: Tea stall owner, Phone: 98765 11122), buttons Confirm and Edit.
-User taps Confirm -> `ai-confirm` creates the category and contact -> "Saved" and undo toast (undo soft deletes the created contact and removes the new category).
+User taps Confirm -> `aiConfirm` applies the action on the server and the app displays the result. Multi-step proposals and undo are not supported yet.

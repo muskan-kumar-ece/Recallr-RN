@@ -17,7 +17,7 @@ People who meet many people and need to remember context: business owners, freel
 - **Mobile:** iOS and Android (one Expo codebase in `apps/mobile`).
 - **Web:** Full web application and public card host in Next.js App Router (`apps/web`).
 - **Public card page:** Responsive web card page at `/c/[slug]` with vCard download and app store links.
-- **Backend:** One shared Supabase backend (Postgres, Auth, Storage, Edge Functions).
+- **Backend:** One shared Firebase backend (Firebase Auth, Cloud Firestore, Cloud Storage, Cloud Functions).
 
 ## v1 scope (build this)
 Onboarding and sign in; Home; People (with desktop split view on web); Contact profile, add, edit, share, merge; Categories; Quick Add; business card scan (camera on mobile, image upload on web); contact import (phone contacts on mobile, CSV/vCard on web); Notes and reminders (local notifications on mobile, server-scheduled push for cross-platform delivery); Search; AI chat (questions and confirmed actions); My Card with QR and public page (`/c/[slug]`); Settings and notification settings; Free and Pro subscription (in-app purchase on mobile, usage and plan inspection on web); document attachments; shared states (empty, loading, error, offline, undo); hidden `/dev/components` parity showcase on both mobile and web.

@@ -2,7 +2,7 @@
 
 ## Goal & design philosophy
 
-The Recallr Web app (`apps/web`) provides the exact same product, visual language, copy, and behavior as the iOS and Android mobile app, sharing the same Supabase backend, design tokens (`@recallr/tokens`), pure domain logic (`@recallr/core`), and data layer (`@recallr/api`).
+The Recallr Web app (`apps/web`) provides the exact same product, visual language, copy, and behavior as the iOS and Android mobile app, sharing Firebase Auth, Cloud Firestore, Cloud Storage, and Cloud Functions, plus design tokens (`@recallr/tokens`), pure domain logic (`@recallr/core`), and data layer (`@recallr/api`).
 
 The core rule is: **Adapt, do not redesign.**
 - **Same look:** Soft white background (`#F8F7F4`), white cards (`#FFFFFF`, radius 16, border `rgba(0,0,0,0.08)`), signature **orange curved corner accent** (`#E8641B`), and Inter font (weights 400 and 500).
@@ -150,7 +150,7 @@ The web application adapts smoothly between mobile viewport widths and larger de
   - Drag-and-drop file upload zone + file selector (`<input type="file" accept="image/*">`).
   - Card outline with dashed border: *"Drag and drop a business card image, or browse files"*.
   - Uploads to `contact-files/{user_id}/cards/{uuid}.jpg` with client-side compression (max 1600px).
-  - "Reading card..." animated shimmer over card image while Edge Function `scan-card` runs.
+  - "Reading card..." animated shimmer over card image while Firebase Cloud Function `scanCard` runs.
 - **Review Screen (`/scan-review`):**
   - Left: Card thumbnail with "Replace / Retake" link.
   - Right: Extracted FieldRows (Name, Role, Company, Phone, Email, Address). Fields with confidence < 0.8 flagged with soft orange background and "Check" badge.
@@ -295,9 +295,9 @@ The web application adapts smoothly between mobile viewport widths and larger de
 
 ## Intentional platform differences & compromises
 
-1. **Card Scanning:** Web uses image upload / drag-and-drop instead of live camera viewfinder. Both use identical image upload storage, `scan-card` Edge Function, and review UI.
+1. **Card Scanning:** Web uses image upload / drag-and-drop instead of live camera viewfinder. Both use identical image upload storage, `scanCard` Cloud Function, and review UI.
 2. **Contact Import:** Web imports `.csv` and `.vcf` files with client-side parsing instead of native phone contacts API (`expo-contacts`).
-3. **Reminders & Notifications:** Mobile starts with local notifications (`expo-notifications`). In Phase M6, reminders transition to server-scheduled push notifications (Supabase scheduled worker + Expo Push Notification API) so reminders trigger across all user devices.
+3. **Reminders & Notifications:** Mobile starts with local notifications (`expo-notifications`). In Phase M6, reminders transition to a Firebase scheduled Cloud Function and Expo Push Notification API so reminders trigger across all user devices.
 4. **Subscriptions:** Web v1 shows plan and usage meters and instructs the user to manage purchases in the mobile app (RevenueCat). Direct web billing comes in a future release.
 5. **Document Preview:** Photos previewed inline in both. PDFs on mobile open via system viewer; web previews directly in browser iframe or tab.
 6. **Sharing & vCard:** Mobile uses native share sheet; web uses Web Share API with automatic fallback to clipboard copy and direct `.vcf` download.

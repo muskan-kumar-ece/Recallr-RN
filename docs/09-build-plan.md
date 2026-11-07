@@ -50,13 +50,13 @@ Rules: One phase at a time. At the start of each phase the agent lists assumptio
 
 ---
 
-## Phase M2: Supabase backend setup & Edge Functions skeletons
-- **Scope:** Database schema initialization, RLS policies, type generation, and Edge Functions.
+## Phase M2: Firebase backend setup & Cloud Functions
+- **Scope:** Firebase Auth, Firestore and Storage security rules, and Cloud Functions.
 - **Tasks:**
-  - Run `docs/sql/0001_init.sql` against the Supabase instance.
-  - Verify all tables, triggers, constraints, RLS policies, storage buckets (`contact-files`, `card-assets`), and RPCs (`get_public_card`).
-  - Generate TypeScript database types into `packages/api/src/database.types.ts`.
-  - Create Supabase Edge Functions skeletons with zod input validation, JWT verification, and error contracts:
+  - Configure Firebase Auth, Cloud Firestore, Cloud Storage, and local emulators.
+  - Verify Firestore and Storage Security Rules with the Firebase emulators.
+  - Keep shared document types and validation in `packages/core`.
+  - Create Firebase Cloud Functions with Zod input validation, Firebase Auth checks, and error contracts:
     - `ai-chat`
     - `ai-confirm`
     - `scan-card`
@@ -64,18 +64,17 @@ Rules: One phase at a time. At the start of each phase the agent lists assumptio
     - `suggest-categories`
     - `delete-account`
     - `revenuecat-webhook`
-  - Ensure Edge Functions import or mirror plan quotas and validation rules from `packages/core`.
+  - Ensure Cloud Functions import plan quotas and validation rules from `packages/core`.
 - **Done when:**
-  - Database schema is fully applied and verified with RLS enabled.
-  - `pnpm db:types` executes and generates clean, strict TypeScript types without errors.
-  - Edge Function skeletons pass typecheck and handle authorization headers correctly.
+  - Firestore and Storage rules pass emulator checks.
+  - Firebase Cloud Functions pass strict typecheck and handle authorization correctly.
 
 ---
 
 ## Phase M3: `packages/api` data layer & hooks
-- **Scope:** Universal Supabase client factory and shared TanStack Query hooks.
+- **Scope:** Universal Firebase client factory and shared TanStack Query hooks.
 - **Tasks:**
-  - Implement Supabase client factory supporting platform-specific auth storage (`expo-secure-store` / AsyncStorage on mobile, cookie/localStorage on web).
+  - Implement Firebase clients with native Auth persistence and web Firebase Auth.
   - Implement typed query functions and mutations for:
     - Contacts (list, detail, create, update, soft delete, restore, search).
     - Categories (list, create, update, delete).
@@ -137,17 +136,18 @@ Rules: One phase at a time. At the start of each phase the agent lists assumptio
 
 ---
 
-## Phase M6: Server-scheduled reminders & push notifications (Subject to approval)
+## Phase M6: Server-scheduled reminders & push notifications
 - **Scope:** Cross-device reminder synchronization and notification delivery.
 - **Tasks:**
-  - Setup Supabase `pg_cron` schedule or background worker Edge Function (`dispatch-reminders`) running every minute.
+  - Setup a scheduled Firebase Cloud Function (`dispatchReminderPush`) running every minute.
   - Identify due, undone reminders (`remind_at <= now() and done_at is null and deleted_at is null`).
-  - Send push notifications to the user's mobile devices via the Expo Push Notification API.
-  - Web Push notification support via browser PushManager for active web sessions.
+  - Register native FCM/APNs device tokens through an authenticated callable Cloud Function.
+  - Send push notifications to the user's mobile devices through Firebase Cloud Messaging.
+  - Web Push notification support via browser PushManager for active web sessions (not implemented).
   - Handle actions (Done, Snooze) from push notifications.
   - Respect user quiet hours and timezone settings.
 - **Done when:**
-  - A reminder created on Web triggers a push notification on the user's phone at the exact scheduled time.
+  - A reminder created on Web triggers a push notification on the user's phone within one scheduler interval of its due time.
   - Completing or snoozing the reminder updates database state across all clients.
 
 ---

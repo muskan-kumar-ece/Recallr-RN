@@ -1,0 +1,116 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    function docBelongsToUser(data) {
+      return isAuthenticated() && (
+        data.user_id == request.auth.uid || 
+        data.userId == request.auth.uid
+      );
+    }
+    function docCreatedByUser(data) {
+      return isAuthenticated()
+        && data.keys().hasAny(['user_id', 'userId'])
+        && data.get('user_id', request.auth.uid) == request.auth.uid
+        && data.get('userId', request.auth.uid) == request.auth.uid;
+    }
+
+    function unchangedOwner(oldData, newData) {
+      return docBelongsToUser(oldData)
+        && docBelongsToUser(newData)
+        && newData.get('user_id', null) == oldData.get('user_id', null)
+        && newData.get('userId', null) == oldData.get('userId', null);
+    }
+
+    // Profiles and Settings
+    match /profiles/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+    match /user_settings/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+    match /entitlements/{userId} {
+      allow read: if isOwner(userId);
+      // Clients may initialize a free entitlement only. Paid entitlements are server-owned.
+      allow create: if isOwner(userId)
+        && request.resource.data.plan == 'free'
+        && request.resource.data.get('expires_at', null) == null;
+      allow update, delete: if false;
+    }
+    match /usage_counters/{counterId} {
+      allow read: if isAuthenticated() && docBelongsToUser(resource.data);
+      allow write: if false;
+    }
+    // Push tokens are registered and managed only by authenticated Cloud Functions.
+    match /device_tokens/{tokenId} {
+      allow read, write: if false;
+    }
+
+    // Categories
+    match /categories/{categoryId} {
+      allow read: if isAuthenticated() && docBelongsToUser(resource.data);
+      allow create: if docCreatedByUser(request.resource.data);
+      allow update: if unchangedOwner(resource.data, request.resource.data);
+      allow delete: if isAuthenticated() && docBelongsToUser(resource.data);
+    }
+
+    // Contacts
+    match /contacts/{contactId} {
+      allow read: if isAuthenticated() && docBelongsToUser(resource.data);
+      // Contact creation passes through the quota-enforcing createContact callable.
+      allow create: if false;
+      allow update: if unchangedOwner(resource.data, request.resource.data);
+      allow delete: if isAuthenticated() && docBelongsToUser(resource.data);
+    }
+
+    // Notes
+    match /notes/{noteId} {
+      allow read: if isAuthenticated() && docBelongsToUser(resource.data);
+      allow create: if docCreatedByUser(request.resource.data);
+      allow update: if unchangedOwner(resource.data, request.resource.data);
+      allow delete: if isAuthenticated() && docBelongsToUser(resource.data);
+    }
+
+    // Documents
+    match /documents/{docId} {
+      allow read: if isAuthenticated() && docBelongsToUser(resource.data);
+      allow create: if docCreatedByUser(request.resource.data);
+      allow update: if unchangedOwner(resource.data, request.resource.data);
+      allow delete: if isAuthenticated() && docBelongsToUser(resource.data);
+    }
+
+    // Digital Cards
+    match /cards/{cardId} {
+      // Public cards are returned through getPublicCard, which applies field visibility.
+      allow read: if isAuthenticated() && docBelongsToUser(resource.data);
+      // All mutations go through saveDigitalCard for plan and slug enforcement.
+      allow write: if false;
+    }
+
+    // AI Conversations
+    match /ai_conversations/{convId} {
+      // Conversations and messages are read and written through owner-checked Cloud Functions.
+      allow read, write: if false;
+
+      match /messages/{messageId} {
+        allow read, write: if false;
+      }
+    }
+
+    // AI Pending Actions
+    match /ai_pending_actions/{actionId} {
+      // Only authenticated AI callables may create, confirm, cancel, or undo proposals.
+      allow read, write: if false;
+    }
+
+    // Server-managed payment state is never directly accessible from clients.
+    match /payment_orders/{orderId} {
+      allow read, write: if false;
+    }
+  }
+}

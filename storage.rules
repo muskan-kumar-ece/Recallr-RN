@@ -1,0 +1,19 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+    // Private user data: contact photos, business card scans, notes attachments, and documents
+    match /users/{userId}/{allPaths=**} {
+      allow read: if isOwner(userId);
+      // All writes are performed by authenticated Cloud Functions, which enforce aggregate quotas.
+      allow write: if false;
+    }
+    // Public digital business card assets: avatar, logo, shared vCards
+    match /cards/{userId}/{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "name": "recallr-functions",
+  "version": "1.0.0",
+  "description": "Recallr Cloud Functions Gen 2 for Payments, AI, and Admin",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node22 --outfile=lib/index.js --external:firebase-admin --external:firebase-functions",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run src",
+    "watch": "tsc -w",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions"
+  },
+  "engines": {
+    "node": "22"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.1.0",
+    "firebase-functions": "^6.3.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "vitest": "^3.0.7",
+    "typescript": "^5.7.3"
+  },
+  "private": true
+}

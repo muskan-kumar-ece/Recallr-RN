@@ -1,0 +1,101 @@
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
+      ]
+    }
+  ],
+  "hosting": {
+    "public": "apps/web/out",
+    "cleanUrls": true,
+    "trailingSlash": false,
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/terms-and-conditions",
+        "destination": "/terms.html"
+      },
+      {
+        "source": "/privacy-policy",
+        "destination": "/privacy.html"
+      },
+      {
+        "source": "/shipping-policy",
+        "destination": "/shipping.html"
+      },
+      {
+        "source": "/contact-us",
+        "destination": "/contact.html"
+      },
+      {
+        "source": "/cancellation-and-refunds",
+        "destination": "/refund.html"
+      },
+      {
+        "source": "/cancellation-refund-policy",
+        "destination": "/refund.html"
+      },
+      {
+        "source": "/refund-policy",
+        "destination": "/refund.html"
+      },
+      {
+        "source": "/c/**",
+        "destination": "/c/item.html"
+      },
+      {
+        "source": "/categories/**",
+        "destination": "/categories/item.html"
+      },
+      {
+        "source": "/document/**",
+        "destination": "/document/item.html"
+      },
+      {
+        "source": "/people/new",
+        "destination": "/people/new.html"
+      },
+      {
+        "source": "/people/*/edit",
+        "destination": "/people/item/edit.html"
+      },
+      {
+        "source": "/people/*/share",
+        "destination": "/people/item/share.html"
+      },
+      {
+        "source": "/people/**",
+        "destination": "/people/item.html"
+      },
+      {
+        "source": "/notes/new",
+        "destination": "/notes/new.html"
+      },
+      {
+        "source": "/notes/**",
+        "destination": "/notes/item.html"
+      },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

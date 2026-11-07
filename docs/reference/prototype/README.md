@@ -42,6 +42,6 @@ docs/reference/prototype/
 ### Replaced components & infrastructure (Built clean in monorepo)
 1. **Workspace Root:** Single root `package.json`, `app.json`, and `tsconfig.json` are replaced by Turborepo + pnpm monorepo structure.
 2. **Hardcoded Styling:** Ad-hoc inline CSS and raw values in mock components are replaced with strictly typed tokens from `@recallr/tokens`.
-3. **Data Types:** Untyped/manual types in `src/types/database.ts` are replaced by generated Supabase TypeScript types in `packages/api/src/database.types.ts`.
-4. **Client & Auth:** Ad-hoc `src/lib/supabase.ts` and `src/context/AuthContext.tsx` are replaced by the universal `@recallr/api` client factory and TanStack Query hooks.
+3. **Data Types:** Prototype types are replaced by shared domain types in `packages/core` and Firebase document adapters in `packages/api`.
+4. **Client & Auth:** Prototype-only local mock auth is replaced by the Firebase Auth integration in `@recallr/api` and the native Firebase adapter in `apps/mobile`.
 5. **Business Logic:** Logic embedded in screens is consolidated into pure TypeScript functions with unit test coverage in `packages/core`.

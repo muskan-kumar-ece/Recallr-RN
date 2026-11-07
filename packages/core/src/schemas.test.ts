@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { firebaseAIActionProposalSchema, firebaseScanCardOutputSchema, userSettingsInputSchema } from './schemas';
+import { firebaseAIActionProposalSchema, firebaseAIChatInputSchema, firebaseScanCardOutputSchema, userSettingsInputSchema } from './schemas';
 
 describe('user settings schema', () => {
   it('accepts each documented accent theme', () => {
@@ -39,5 +39,21 @@ describe('AI action proposals', () => {
       kind: 'propose_batch',
       actions: [{ kind: 'propose_add_contact', name: 'Asha' }],
     }).success).toBe(false);
+  });
+});
+
+describe('AI chat input schema', () => {
+  it('accepts valid messages with or without conversationId', () => {
+    expect(firebaseAIChatInputSchema.safeParse({ message: 'Hello' }).success).toBe(true);
+    expect(firebaseAIChatInputSchema.safeParse({ message: 'Hello', conversationId: undefined }).success).toBe(true);
+    expect(firebaseAIChatInputSchema.safeParse({ message: 'Hello', conversationId: null }).success).toBe(true);
+    expect(firebaseAIChatInputSchema.safeParse({ message: 'Hello', conversationId: '' }).success).toBe(true);
+    expect(firebaseAIChatInputSchema.safeParse({ message: 'Hello', conversationId: 'conv_123' }).success).toBe(true);
+  });
+
+  it('rejects empty or excessively long messages', () => {
+    expect(firebaseAIChatInputSchema.safeParse({ message: '' }).success).toBe(false);
+    expect(firebaseAIChatInputSchema.safeParse({ message: '   ' }).success).toBe(false);
+    expect(firebaseAIChatInputSchema.safeParse({ message: 'a'.repeat(2001) }).success).toBe(false);
   });
 });

@@ -533,12 +533,14 @@ export async function askRecallrAI(
   response: AIResponseContent;
 }> {
   const message = typeof messageOrInput === 'string' ? messageOrInput : messageOrInput.message;
-  const conversationId = typeof messageOrInput === 'string' ? maybeConvId : messageOrInput.conversationId;
+  const rawConvId = typeof messageOrInput === 'string' ? maybeConvId : messageOrInput.conversationId;
+  const conversationId = (rawConvId && rawConvId.trim()) ? rawConvId.trim() : undefined;
   const fn = httpsCallable<
     { message: string; conversationId?: string },
     { conversationId: string; messageId: string; response: AIResponseContent }
   >(getFirebaseFunctions(), 'aiChat');
-  const response = await fn({ message, conversationId });
+  const payload = conversationId ? { message, conversationId } : { message };
+  const response = await fn(payload);
   return response.data;
 }
 

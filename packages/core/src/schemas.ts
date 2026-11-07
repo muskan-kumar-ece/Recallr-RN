@@ -109,8 +109,8 @@ export type UserSettingsInput = z.infer<typeof userSettingsInputSchema>;
 
 // Firebase Callable Cloud Function Input Schemas
 export const firebaseAIChatInputSchema = z.object({
-  message: z.string().trim().min(1).max(2000),
-  conversationId: z.string().regex(/^[A-Za-z0-9_-]{1,128}$/).optional(),
+  message: z.string().trim().min(1, 'Enter a message up to 2,000 characters.').max(2000, 'Enter a message up to 2,000 characters.'),
+  conversationId: z.string().regex(/^[A-Za-z0-9_-]{1,128}$/).nullish().or(z.literal('')),
 });
 
 export const firebaseRegisterPushTokenSchema = z.object({

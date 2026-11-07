@@ -46,6 +46,21 @@ export const createContact = onCall(async (request) => {
   const contactRef = db.collection('contacts').doc();
   const entitlementRef = db.collection('entitlements').doc(uid);
   const ownedContactsQuery = db.collection('contacts').where('user_id', '==', uid);
+
+  const [entitlementSnapshot, ownedContactSnapshot] = await Promise.all([
+    entitlementRef.get(),
+    ownedContactsQuery.get(),
+  ]);
+  const entitlement = entitlementSnapshot.data();
+  const expiry = entitlement?.expires_at ? new Date(entitlement.expires_at).getTime() : Number.POSITIVE_INFINITY;
+  const isPro = entitlement?.plan === 'pro' && expiry > Date.now();
+  const activeContacts = ownedContactSnapshot.docs.filter((item) => !item.data().deleted_at).length;
+  if (!isPro && activeContacts >= PLANS.free.contacts) {
+    throw new HttpsError('resource-exhausted', 'The Free plan allows up to 50 active contacts.', {
+      code: 'limit_reached', kind: 'contacts', limit: PLANS.free.contacts,
+    });
+  }
+
   const contact = {
     ...parsed.data,
     id: contactRef.id,
@@ -69,23 +84,7 @@ export const createContact = onCall(async (request) => {
     updated_at: now,
   };
 
-  await db.runTransaction(async (transaction) => {
-    const [entitlementSnapshot, ownedContactSnapshot] = await Promise.all([
-      transaction.get(entitlementRef),
-      transaction.get(ownedContactsQuery),
-    ]);
-    const entitlement = entitlementSnapshot.data();
-    const expiry = entitlement?.expires_at ? new Date(entitlement.expires_at).getTime() : Number.POSITIVE_INFINITY;
-    const isPro = entitlement?.plan === 'pro' && expiry > Date.now();
-    const activeContacts = ownedContactSnapshot.docs.filter((item) => !item.data().deleted_at).length;
-    if (!isPro && activeContacts >= PLANS.free.contacts) {
-      throw new HttpsError('resource-exhausted', 'The Free plan allows up to 50 active contacts.', {
-        code: 'limit_reached', kind: 'contacts', limit: PLANS.free.contacts,
-      });
-    }
-    transaction.create(contactRef, contact);
-  });
-
+  await contactRef.set(contact);
   return contact;
 });
 
@@ -102,38 +101,40 @@ export const createContactsBatch = onCall(async (request) => {
   const now = new Date().toISOString();
   const refs = parsed.data.map(() => db.collection('contacts').doc());
   const entitlementRef = db.collection('entitlements').doc(uid);
-  await db.runTransaction(async (transaction) => {
-    const [entitlement, ownedContacts] = await Promise.all([
-      transaction.get(entitlementRef),
-      transaction.get(db.collection('contacts').where('user_id', '==', uid)),
-    ]);
-    const entitlementData = entitlement.data();
-    const expiry = entitlementData?.expires_at ? new Date(entitlementData.expires_at).getTime() : Number.POSITIVE_INFINITY;
-    const hasPro = entitlementData?.plan === 'pro' && expiry > Date.now();
-    const activeCount = ownedContacts.docs.filter((item) => !item.data().deleted_at).length;
-    if (!hasPro && activeCount + parsed.data.length > PLANS.free.contacts) {
-      throw new HttpsError('resource-exhausted', 'The Free plan allows up to 50 active contacts.', {
-        code: 'limit_reached', kind: 'contacts', limit: PLANS.free.contacts,
-      });
-    }
-    parsed.data.forEach((input, index) => {
-      const ref = refs[index];
-      if (!ref) return;
-      transaction.create(ref, {
-        ...input,
-        id: ref.id,
-        user_id: uid,
-        userId: uid,
-        tags: input.tags || [],
-        links: input.links || [],
-        category_ids: input.category_ids || [],
-        source: input.source || 'import',
-        deleted_at: null,
-        created_at: now,
-        updated_at: now,
-      });
+
+  const [entitlementSnapshot, ownedContactsSnapshot] = await Promise.all([
+    entitlementRef.get(),
+    db.collection('contacts').where('user_id', '==', uid).get(),
+  ]);
+  const entitlementData = entitlementSnapshot.data();
+  const expiry = entitlementData?.expires_at ? new Date(entitlementData.expires_at).getTime() : Number.POSITIVE_INFINITY;
+  const hasPro = entitlementData?.plan === 'pro' && expiry > Date.now();
+  const activeCount = ownedContactsSnapshot.docs.filter((item) => !item.data().deleted_at).length;
+  if (!hasPro && activeCount + parsed.data.length > PLANS.free.contacts) {
+    throw new HttpsError('resource-exhausted', 'The Free plan allows up to 50 active contacts.', {
+      code: 'limit_reached', kind: 'contacts', limit: PLANS.free.contacts,
+    });
+  }
+
+  const batch = db.batch();
+  parsed.data.forEach((input, index) => {
+    const ref = refs[index];
+    if (!ref) return;
+    batch.create(ref, {
+      ...input,
+      id: ref.id,
+      user_id: uid,
+      userId: uid,
+      tags: input.tags || [],
+      links: input.links || [],
+      category_ids: input.category_ids || [],
+      source: input.source || 'import',
+      deleted_at: null,
+      created_at: now,
+      updated_at: now,
     });
   });
+  await batch.commit();
   return { count: refs.length };
 });
 
@@ -149,68 +150,65 @@ export const saveDigitalCard = onCall(async (request) => {
   const cardRef = cardId ? db.collection('cards').doc(cardId) : db.collection('cards').doc();
   const now = new Date().toISOString();
   const cardsQuery = db.collection('cards').where('user_id', '==', userId);
-  return db.runTransaction(async (transaction) => {
-    const [currentSnapshot, cardsSnapshot, entitlementSnapshot] = await Promise.all([
-      cardId ? transaction.get(cardRef) : Promise.resolve(null),
-      transaction.get(cardsQuery),
-      cardId ? Promise.resolve(null) : transaction.get(db.collection('entitlements').doc(userId)),
-    ]);
-    const current = currentSnapshot?.data();
-    if (cardId && (!currentSnapshot?.exists || !current || (current.user_id ?? current.userId) !== userId)) {
-      throw new HttpsError('not-found', 'Business card not found.');
-    }
-    const previousPhoto = current?.photo_path;
-    const previousLogo = current?.logo_path;
-    for (const [field, previous] of [['photo_path', previousPhoto], ['logo_path', previousLogo]] as const) {
-      const value = parsedInput.data[field];
-      if (value == null) continue;
-      const isOwnedPath = value.startsWith(`cards/${userId}/`);
-      const unchangedLegacyUrl = value === previous && /^https:\/\//i.test(value);
-      if (!isOwnedPath && !unchangedLegacyUrl) {
-        throw new HttpsError('permission-denied', 'Card images must use your own card storage path.');
-      }
-    }
 
-    const slug = parsedInput.data.slug || String(current?.slug || `card-${userId.slice(0, 6)}-${cardRef.id.slice(0, 8)}`);
-    const [sameSlugSnapshot] = await Promise.all([
-      transaction.get(db.collection('cards').where('slug', '==', slug)),
-    ]);
-    if (sameSlugSnapshot.docs.some((item) => item.id !== cardRef.id)) {
-      throw new HttpsError('already-exists', 'That card link is already in use. Choose another link.');
+  const [currentSnapshot, cardsSnapshot, entitlementSnapshot] = await Promise.all([
+    cardId ? cardRef.get() : Promise.resolve(null),
+    cardsQuery.get(),
+    cardId ? Promise.resolve(null) : db.collection('entitlements').doc(userId).get(),
+  ]);
+  const current = currentSnapshot?.data();
+  if (cardId && (!currentSnapshot?.exists || !current || (current.user_id ?? current.userId) !== userId)) {
+    throw new HttpsError('not-found', 'Business card not found.');
+  }
+  const previousPhoto = current?.photo_path;
+  const previousLogo = current?.logo_path;
+  for (const [field, previous] of [['photo_path', previousPhoto], ['logo_path', previousLogo]] as const) {
+    const value = parsedInput.data[field];
+    if (value == null) continue;
+    const isOwnedPath = value.startsWith(`cards/${userId}/`);
+    const unchangedLegacyUrl = value === previous && /^https:\/\//i.test(value);
+    if (!isOwnedPath && !unchangedLegacyUrl) {
+      throw new HttpsError('permission-denied', 'Card images must use your own card storage path.');
     }
+  }
 
-    let card: Record<string, unknown>;
-    if (current) {
-      card = { ...current, ...parsedInput.data, slug, updated_at: now };
-      transaction.update(cardRef, { ...parsedInput.data, slug, updated_at: now });
-    } else {
-      const completeInput = digitalCardInputSchema.safeParse({
-        ...parsedInput.data,
-        slug,
-        label: parsedInput.data.label || 'Business',
+  const slug = parsedInput.data.slug || String(current?.slug || `card-${userId.slice(0, 6)}-${cardRef.id.slice(0, 8)}`);
+  const sameSlugSnapshot = await db.collection('cards').where('slug', '==', slug).get();
+  if (sameSlugSnapshot.docs.some((item) => item.id !== cardRef.id)) {
+    throw new HttpsError('already-exists', 'That card link is already in use. Choose another link.');
+  }
+
+  let card: Record<string, unknown>;
+  if (current) {
+    card = { ...current, ...parsedInput.data, slug, updated_at: now };
+    await cardRef.update({ ...parsedInput.data, slug, updated_at: now });
+  } else {
+    const completeInput = digitalCardInputSchema.safeParse({
+      ...parsedInput.data,
+      slug,
+      label: parsedInput.data.label || 'Business',
+    });
+    if (!completeInput.success) throw new HttpsError('invalid-argument', 'Check the business card details and try again.');
+    const entitlement = entitlementSnapshot?.data();
+    const expiry = entitlement?.expires_at ? new Date(entitlement.expires_at).getTime() : Number.POSITIVE_INFINITY;
+    const isPro = entitlement?.plan === 'pro' && expiry > Date.now();
+    const cardLimit = isPro ? PLANS.pro.digitalCards : PLANS.free.digitalCards;
+    if (cardsSnapshot.size >= cardLimit) {
+      throw new HttpsError('resource-exhausted', `Your plan allows up to ${cardLimit} business card${cardLimit === 1 ? '' : 's'}.`, {
+        code: 'limit_reached', kind: 'cards', limit: cardLimit,
       });
-      if (!completeInput.success) throw new HttpsError('invalid-argument', 'Check the business card details and try again.');
-      const entitlement = entitlementSnapshot?.data();
-      const expiry = entitlement?.expires_at ? new Date(entitlement.expires_at).getTime() : Number.POSITIVE_INFINITY;
-      const isPro = entitlement?.plan === 'pro' && expiry > Date.now();
-      const cardLimit = isPro ? PLANS.pro.digitalCards : PLANS.free.digitalCards;
-      if (cardsSnapshot.size >= cardLimit) {
-        throw new HttpsError('resource-exhausted', `Your plan allows up to ${cardLimit} business card${cardLimit === 1 ? '' : 's'}.`, {
-          code: 'limit_reached', kind: 'cards', limit: cardLimit,
-        });
-      }
-      card = {
-        ...completeInput.data,
-        id: cardRef.id,
-        user_id: userId,
-        userId,
-        created_at: now,
-        updated_at: now,
-      };
-      transaction.create(cardRef, card);
     }
-    return card;
-  });
+    card = {
+      ...completeInput.data,
+      id: cardRef.id,
+      user_id: userId,
+      userId,
+      created_at: now,
+      updated_at: now,
+    };
+    await cardRef.set(card);
+  }
+  return card;
 });
 
 async function reserveUsage(uid: string, kind: UsageKind): Promise<() => Promise<void>> {
@@ -1015,7 +1013,7 @@ export const aiConfirm = onCall(async (request) => {
       const restoredContactIds = new Set(effects.filter((effect) => effect.collection === 'contacts' && effect.operation === 'restore'
         && (Object.hasOwn(effect.data || {}, 'category_ids') || (Array.isArray(effect.data?.__delete_fields) && effect.data.__delete_fields.includes('category_ids')))).map((effect) => effect.id));
       const categoryUsers = await Promise.all(effects.filter((effect) => effect.collection === 'categories' && effect.operation === 'delete').map((effect) =>
-        transaction.get(db.collection('contacts').where('category_ids', 'array-contains', effect.id))
+        db.collection('contacts').where('category_ids', 'array-contains', effect.id).get()
       ));
       for (const [index, effect] of effects.entries()) {
         const snapshot = snapshots[index];
@@ -1062,8 +1060,8 @@ export const aiConfirm = onCall(async (request) => {
         throw new HttpsError('invalid-argument', 'Delete actions must be confirmed separately.');
       }
       const [categories, contacts, entitlement] = await Promise.all([
-        transaction.get(db.collection('categories').where('user_id', '==', request.auth!.uid).limit(450)),
-        transaction.get(db.collection('contacts').where('user_id', '==', request.auth!.uid).limit(450)),
+        db.collection('categories').where('user_id', '==', request.auth!.uid).limit(450).get(),
+        db.collection('contacts').where('user_id', '==', request.auth!.uid).limit(450).get(),
         transaction.get(db.collection('entitlements').doc(request.auth!.uid)),
       ]);
       const requestedContactCreates = action.actions.filter((step) => step.kind === 'propose_add_contact').length;
@@ -1166,7 +1164,7 @@ export const aiConfirm = onCall(async (request) => {
     } else {
     switch (action.kind) {
       case 'propose_create_category': {
-        const categories = await transaction.get(db.collection('categories').where('user_id', '==', request.auth!.uid));
+        const categories = await db.collection('categories').where('user_id', '==', request.auth!.uid).get();
         const existing = categories.docs.find((category) => String(category.data().name || '').toLowerCase() === action.name.toLowerCase());
         if (existing) throw new HttpsError('already-exists', 'That category already exists.');
         const categoryRef = db.collection('categories').doc();
@@ -1181,8 +1179,8 @@ export const aiConfirm = onCall(async (request) => {
       }
       case 'propose_add_contact': {
         const [contacts, categories, entitlement] = await Promise.all([
-          transaction.get(db.collection('contacts').where('user_id', '==', request.auth!.uid)),
-          transaction.get(db.collection('categories').where('user_id', '==', request.auth!.uid)),
+          db.collection('contacts').where('user_id', '==', request.auth!.uid).get(),
+          db.collection('categories').where('user_id', '==', request.auth!.uid).get(),
           transaction.get(db.collection('entitlements').doc(request.auth!.uid)),
         ]);
         const activeContactCount = contacts.docs.filter((item) => !item.data().deleted_at).length;
@@ -1259,7 +1257,7 @@ export const aiConfirm = onCall(async (request) => {
       }
       case 'propose_move_to_category': {
         const [categoryMatches, contacts] = await Promise.all([
-          transaction.get(db.collection('categories').where('user_id', '==', request.auth!.uid)),
+          db.collection('categories').where('user_id', '==', request.auth!.uid).get(),
           Promise.all(action.contact_ids.map((id) => transaction.get(db.collection('contacts').doc(id)))),
         ]);
         const category = categoryMatches.docs.find((item) => String(item.data().name || '').toLowerCase() === action.category_name.toLowerCase());
